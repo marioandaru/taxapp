@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard ASN - Arthapala</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #16478A;
+            --primary-yellow: #FFC107;
+            --light-blue: #1976D2;
+            --background: #F7FAFF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: var(--primary-blue);
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s;
+            overflow-y: auto;
+        }
+        
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        
+        .sidebar-brand h4 {
+            color: var(--primary-yellow);
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--primary-yellow);
+        }
+        
+        .sidebar-menu i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+        
+        .top-header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .content-area {
+            padding: 2rem;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary-yellow);
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stats-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .stats-trend {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        
+        .trend-up {
+            color: #28a745;
+        }
+        
+        .trend-down {
+            color: #dc3545;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 1.5rem;
+			position: relative;
+            height: 300px;
+        }
+        
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+        
+        .recent-transactions {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 1.5rem;
+        }
+        
+        .ai-assistant {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 320px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s;
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .ai-header {
+            background: var(--primary-yellow);
+            color: var(--primary-blue);
+            padding: 1rem;
+            border-radius: 15px 15px 0 0;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .ai-content {
+            padding: 1rem;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        
+        .ai-message {
+            background: #f8f9fa;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            position: relative;
+            animation: fadeIn 0.5s;
+        }
+        
+        .ai-message.system {
+            background: #e7f3ff;
+            border-left: 3px solid var(--light-blue);
+        }
+        
+        .ai-message.warning {
+            background: #fff3cd;
+            border-left: 3px solid #ffc107;
+        }
+        
+        .ai-message.success {
+            background: #d4edda;
+            border-left: 3px solid #28a745;
+        }
+        
+        .ai-typing {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .typing-dots {
+            display: inline-block;
+            margin-left: 5px;
+        }
+        
+        .typing-dots span {
+            animation: typing 1.4s infinite;
+            display: inline-block;
+        }
+        
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        .btn-yellow {
+            background: var(--primary-yellow);
+            border: none;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+        
+        .btn-yellow:hover {
+            background: #e0a800;
+            color: var(--primary-blue);
+        }
+		
+		/* Style untuk tombol aksi */
+		.btn-group-sm > .btn {
+			padding: 0.3rem 0.5rem;
+			font-size: 0.75rem;
+		}
+
+		.btn-group .btn {
+			border-radius: 0.25rem !important;
+			margin: 0 2px;
+		}
+
+		.btn-group {
+			flex-wrap: nowrap;
+		}
+
+		/* Style untuk SweetAlert custom */
+		.swal2-popup {
+			border-radius: 1rem !important;
+		}
+
+		.swal2-title {
+			color: #16478A !important;
+			font-weight: 600 !important;
+		}
+
+		/* Style untuk tabel */
+		.table-hover tbody tr:hover {
+			background-color: rgba(22, 71, 138, 0.05) !important;
+		}
+
+		.table td {
+			vertical-align: middle;
+		}
+
+		/* Debug border untuk troubleshooting */
+		.debug-border {
+			border: 1px solid red !important;
+		}
+
+		.btn-group .btn:first-child {
+			border-top-left-radius: 0.25rem;
+			border-bottom-left-radius: 0.25rem;
+		}
+
+		.btn-group .btn:last-child {
+			border-top-right-radius: 0.25rem;
+			border-bottom-right-radius: 0.25rem;
+		}
+        
+        .table th {
+            background-color: #f8f9fa;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+        
+        .badge {
+            font-size: 0.75rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0.3; }
+            30% { opacity: 1; }
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-left: -280px;
+            }
+            
+            .sidebar.show {
+                margin-left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .ai-assistant {
+                width: calc(100% - 40px);
+                left: 20px;
+                right: 20px;
+            }
+            
+            .top-header {
+                padding: 1rem;
+            }
+            
+            .content-area {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <h4><i class="fas fa-coins me-2"></i>Arthapala</h4>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="dashboard-asn.html" class="active">
+                <i class="fas fa-tachometer-alt"></i>Dashboard
+            </a>
+            <a href="transaksi.html">
+                <i class="fas fa-plus-circle"></i>Input Transaksi
+            </a>
+            <a href="referensi.html">
+                <i class="fas fa-database"></i>Referensi
+            </a>
+            <a href="laporan.html">
+                <i class="fas fa-file-export"></i>Laporan & Ekspor
+            </a>
+            <a href="kalkulator.html">
+                <i class="fas fa-calculator"></i>Kalkulator
+            </a>
+            <a href="settings.html">
+                <i class="fas fa-cog"></i>Pengaturan
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Header -->
+        <div class="top-header">
+            <button class="btn btn-link d-md-none" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h5 class="mb-0">Dashboard ASN</h5>
+            <div class="user-info">
+                <span>ASN User</span>
+                <div class="user-avatar">AU</div>
+                <button class="btn btn-sm btn-outline-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stats-card">
+                        <div class="stats-number" id="totalPajakBulan">Rp 125,450,000</div>
+                        <div class="stats-label">Total Pajak Bulan Ini</div>
+                        <div class="stats-trend trend-up">
+                            <i class="fas fa-arrow-up me-1"></i>12.5% dari bulan lalu
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stats-card">
+                        <div class="stats-number" id="vendorAktif">47</div>
+                        <div class="stats-label">Vendor Aktif</div>
+                        <div class="stats-trend trend-up">
+                            <i class="fas fa-arrow-up me-1"></i>3 vendor baru
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stats-card">
+                        <div class="stats-number" id="transaksiPending">8</div>
+                        <div class="stats-label">Transaksi Belum Lengkap</div>
+                        <div class="stats-trend trend-down">
+                            <i class="fas fa-arrow-down me-1"></i>2 transaksi diperbaiki
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="stats-card">
+                        <div class="stats-number" id="pphYtd">Rp 1,456,780,000</div>
+                        <div class="stats-label">PPh Terkumpul YTD</div>
+                        <div class="stats-trend trend-up">
+                            <i class="fas fa-arrow-up me-1"></i>18.3% dari tahun lalu
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="chart-container">
+                        <div class="chart-title">Tren Bulanan PPh (dalam Juta Rupiah)</div>
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="chart-container">
+                        <div class="chart-title">Kontribusi Per Jenis Pajak</div>
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="recent-transactions">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Transaksi Terbaru</h5>
+                    <div>
+                        <button class="btn btn-sm btn-yellow me-2" onclick="exportXML()">
+                            <i class="fas fa-file-export me-1"></i>Export XML
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="exportCSV()">
+                            <i class="fas fa-file-csv me-1"></i>Export CSV
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tanggal</th>
+                                <th>Jenis</th>
+                                <th>Wajib Pajak</th>
+                                <th>Penghasilan</th>
+                                <th>PPh</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionTable">
+                            <!-- Data akan dimuat dari JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Assistant Panel -->
+    <div class="ai-assistant" id="aiAssistant">
+        <div class="ai-header">
+            <div>
+                <i class="fas fa-robot me-2"></i>Arthapala AI
+            </div>
+            <button class="btn btn-sm btn-link p-0" onclick="toggleAI()">
+                <i class="fas fa-minus" id="aiToggleIcon"></i>
+            </button>
+        </div>
+        <div class="ai-content" id="aiContent">
+            <!-- AI messages will be inserted here -->
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+	<!-- Pastikan SweetAlert2 CSS dan JS sudah dimuat -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.js"></script>
+    
+    <script>
+        // ========== BYPASS LOGIN ==========
+        // Kode ini akan melewati proses login untuk pengembangan
+        // Hapus kode ini saat aplikasi siap untuk produksi
+        
+        // Cek apakah session sudah ada
+        const session = localStorage.getItem('arthapala_session');
+        
+        // Jika tidak ada session, buat session dummy untuk bypass login
+        if (!session) {
+            localStorage.setItem('arthapala_session', 'bypass_' + Date.now());
+            console.log('Bypass login aktif - Session dummy dibuat');
+        }
+        
+        // ========== END BYPASS LOGIN ==========
+
+        // Global variables
+        let trendChart, pieChart;
+        let aiMessages = [];
+        let aiCheckInterval;
+        
+        // Sample data
+        const sampleData = {
+            transactions: [
+                {id: 'TRX-001', date: '2025-09-20', type: 'PPh21', taxpayer: 'John Doe', income: 5000000, pph: 250000, status: 'Lengkap', docRef: 'DOC-001'},
+                {id: 'TRX-002', date: '2025-09-21', type: 'PPh22', taxpayer: 'PT ABC', income: 10000000, pph: 450000, status: 'Lengkap', docRef: 'DOC-002'},
+                {id: 'TRX-003', date: '2025-09-22', type: 'PPh23', taxpayer: 'CV XYZ', income: 3000000, pph: 90000, status: 'Pending', docRef: ''},
+                {id: 'TRX-004', date: '2025-09-23', type: 'PPh21', taxpayer: 'Jane Smith', income: 4500000, pph: 225000, status: 'Lengkap', docRef: 'DOC-004'},
+                {id: 'TRX-005', date: '2025-09-24', type: 'PPh22', taxpayer: 'UD Maju', income: 1500000, pph: 0, status: 'Tidak Terutang', docRef: 'DOC-005'},
+                {id: 'TRX-006', date: '2025-09-25', type: 'PPh23', taxpayer: 'PT Sejahtera', income: 7500000, pph: 225000, status: 'Lengkap', docRef: 'DOC-006'},
+                {id: 'TRX-007', date: '2025-09-26', type: 'PPh21', taxpayer: 'Robert Johnson', income: 6000000, pph: 300000, status: 'Pending', docRef: ''},
+                {id: 'TRX-008', date: '2025-09-27', type: 'PPh Final', taxpayer: 'UMKM Berkah', income: 8000000, pph: 40000, status: 'Lengkap', docRef: 'DOC-008'}
+            ]
+        };
+
+        // Initialize dashboard dengan error handling
+		document.addEventListener('DOMContentLoaded', function() {
+			console.log('Dashboard loaded'); // Debug log
+			
+			try {
+				initCharts();
+				loadTransactions();
+				initAIAssistant();
+				
+				// Test fungsi - hapus setelah berhasil
+				console.log('Functions initialized successfully');
+				
+			} catch (error) {
+				console.error('Error during initialization:', error);
+				
+				// Fallback: coba load transactions saja
+				setTimeout(() => {
+					loadTransactions();
+				}, 1000);
+			}
+			
+			// Auto-hide sidebar di mobile saat klik di luar
+			document.addEventListener('click', function(event) {
+				const sidebar = document.getElementById('sidebar');
+				const isClickInsideSidebar = sidebar.contains(event.target);
+				const isClickOnMenuButton = event.target.closest('.btn-link') !== null;
+				
+				if (!isClickInsideSidebar && !isClickOnMenuButton && window.innerWidth < 768) {
+					sidebar.classList.remove('show');
+				}
+			});
+		});
+
+        function initCharts() {
+            // Trend Chart
+            const trendCtx = document.getElementById('trendChart').getContext('2d');
+            trendChart = new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep'],
+                    datasets: [
+                        {
+                            label: 'PPh21',
+                            data: [45, 52, 48, 61, 55, 67, 73, 69, 78],
+                            borderColor: '#16478A',
+                            backgroundColor: 'rgba(22, 71, 138, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'PPh22',
+                            data: [28, 35, 42, 38, 45, 41, 48, 52, 47],
+                            borderColor: '#1976D2',
+                            backgroundColor: 'rgba(25, 118, 210, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'PPh23',
+                            data: [15, 23, 18, 27, 21, 32, 29, 35, 31],
+                            borderColor: '#FFC107',
+                            backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y} juta`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Juta Rupiah'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value + ' jt';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Pie Chart
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            pieChart = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['PPh21', 'PPh22', 'PPh23', 'PPh Final'],
+                    datasets: [{
+                        data: [45, 30, 20, 5],
+                        backgroundColor: ['#16478A', '#1976D2', '#FFC107', '#28a745'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.parsed}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function loadTransactions() {
+			const tbody = document.getElementById('transactionTable');
+			tbody.innerHTML = '';
+			
+			// Sort transactions by date (newest first)
+			const sortedTransactions = [...sampleData.transactions].sort((a, b) => 
+				new Date(b.date) - new Date(a.date)
+			);
+			
+			sortedTransactions.forEach(transaction => {
+				const row = document.createElement('tr');
+				const statusBadge = transaction.status === 'Lengkap' ? 'success' : 
+								  transaction.status === 'Pending' ? 'warning' : 'secondary';
+				
+				row.innerHTML = `
+					<td><strong>${transaction.id}</strong></td>
+					<td>${formatDateID(transaction.date)}</td>
+					<td><span class="badge bg-primary">${transaction.type}</span></td>
+					<td>${transaction.taxpayer}</td>
+					<td>Rp ${transaction.income.toLocaleString('id-ID')}</td>
+					<td>Rp ${transaction.pph.toLocaleString('id-ID')}</td>
+					<td><span class="badge bg-${statusBadge}">${transaction.status}</span></td>
+					<td>
+						<div class="btn-group btn-group-sm" role="group">
+							<button type="button" class="btn btn-outline-primary" onclick="editTransaction('${transaction.id}')" title="Edit">
+								<i class="fas fa-edit"></i>
+							</button>
+							<button type="button" class="btn btn-outline-info" onclick="viewDetails('${transaction.id}')" title="Detail">
+								<i class="fas fa-eye"></i>
+							</button>
+						</div>
+					</td>
+				`;
+				tbody.appendChild(row);
+			});
+		}
+
+        function initAIAssistant() {
+            // Add initial welcome message
+            addAIMessage('system', 'Halo! Saya AI Assistant Arthapala. Saya akan membantu memantau transaksi dan memberikan rekomendasi.');
+            
+            // Run initial AI check
+            runAICheck();
+            
+            // Set interval for periodic AI checks (every 2 minutes)
+            aiCheckInterval = setInterval(runAICheck, 120000);
+        }
+
+        function runAICheck() {
+            // Show typing indicator
+            showAITyping();
+            
+            // Simulate AI processing time
+            setTimeout(() => {
+                // Simple rule-based AI logic
+                const recommendations = [];
+                
+                // Check for incomplete transactions
+                const incompleteTransactions = sampleData.transactions.filter(t => !t.docRef || t.status === 'Pending');
+                if (incompleteTransactions.length > 0) {
+                    recommendations.push({
+                        type: 'warning',
+                        message: `Terdapat ${incompleteTransactions.length} transaksi yang belum lengkap. Perlu dilengkapi sebelum ekspor.`,
+                        action: 'fixIncomplete'
+                    });
+                }
+                
+                // Check for small amounts
+                const smallAmountTransactions = sampleData.transactions.filter(t => t.income < 2000000 && t.pph > 0);
+                if (smallAmountTransactions.length > 0) {
+                    recommendations.push({
+                        type: 'info',
+                        message: `Ditemukan ${smallAmountTransactions.length} transaksi dengan nilai < Rp2.000.000. Perlu verifikasi kelayakan pajak.`,
+                        action: 'reviewSmallAmounts'
+                    });
+                }
+                
+                // Check for high-value transactions
+                const highValueTransactions = sampleData.transactions.filter(t => t.income > 10000000);
+                if (highValueTransactions.length > 0) {
+                    recommendations.push({
+                        type: 'info',
+                        message: `Terdapat ${highValueTransactions.length} transaksi bernilai tinggi (> Rp10 juta). Pastikan dokumentasi lengkap.`,
+                        action: 'reviewHighValue'
+                    });
+                }
+                
+                // Random positive feedback (25% chance)
+                if (Math.random() < 0.25) {
+                    recommendations.push({
+                        type: 'success',
+                        message: 'Performanya bagus! Tingkat kepatuhan pajak bulan ini meningkat 15% dibanding bulan lalu.',
+                        action: null
+                    });
+                }
+                
+                updateAIPanel(recommendations);
+            }, 1500);
+        }
+
+        function updateAIPanel(recommendations) {
+            // Clear typing indicator
+            clearAITyping();
+            
+            // Add new messages
+            recommendations.forEach(rec => {
+                addAIMessage(rec.type, rec.message, rec.action);
+            });
+            
+            // Add timestamp
+            updateAITimestamp();
+        }
+
+        function addAIMessage(type, message, action = null) {
+            const aiContent = document.getElementById('aiContent');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message ${type}`;
+            
+            let actionButton = '';
+            if (action) {
+                actionButton = `<button class="btn btn-sm btn-yellow mt-2" onclick="handleAIAction('${action}')">Tindakan</button>`;
+            }
+            
+            messageDiv.innerHTML = `
+                <div>${message}</div>
+                ${actionButton}
+            `;
+            
+            aiContent.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            aiContent.scrollTop = aiContent.scrollHeight;
+            
+            // Store message for history
+            aiMessages.push({type, message, timestamp: new Date()});
+        }
+
+        function showAITyping() {
+            const aiContent = document.getElementById('aiContent');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'ai-typing';
+            typingDiv.id = 'aiTyping';
+            typingDiv.innerHTML = 'AI Assistant sedang menganalisis...<span class="typing-dots"><span>.</span><span>.</span><span>.</span></span>';
+            
+            aiContent.appendChild(typingDiv);
+            aiContent.scrollTop = aiContent.scrollHeight;
+        }
+
+        function clearAITyping() {
+            const typingDiv = document.getElementById('aiTyping');
+            if (typingDiv) {
+                typingDiv.remove();
+            }
+        }
+
+        function updateAITimestamp() {
+            // Find and update timestamp
+            const timestampElements = document.querySelectorAll('.ai-timestamp');
+            const now = new Date();
+            const options = { 
+                timeZone: 'Asia/Jakarta',
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            
+            const formattedTime = now.toLocaleDateString('id-ID', options);
+            
+            timestampElements.forEach(el => {
+                el.textContent = `Terakhir diperiksa: ${formattedTime}`;
+            });
+            
+            // If no timestamp element exists, create one
+            if (timestampElements.length === 0) {
+                const aiContent = document.getElementById('aiContent');
+                const timestampDiv = document.createElement('div');
+                timestampDiv.className = 'ai-timestamp text-muted small mt-2';
+                timestampDiv.textContent = `Terakhir diperiksa: ${formattedTime}`;
+                aiContent.appendChild(timestampDiv);
+            }
+        }
+
+        function handleAIAction(action) {
+            switch(action) {
+                case 'fixIncomplete':
+                    fixIncompleteTransactions();
+                    break;
+                case 'reviewSmallAmounts':
+                    reviewSmallAmounts();
+                    break;
+                case 'reviewHighValue':
+                    reviewHighValueTransactions();
+                    break;
+                default:
+                    console.log('Unknown AI action:', action);
+            }
+        }
+
+        function fixIncompleteTransactions() {
+            addAIMessage('system', 'Memulai proses perbaikan transaksi tidak lengkap...');
+            
+            // Simulate AI fixing process
+            setTimeout(() => {
+                const incompleteCount = sampleData.transactions.filter(t => !t.docRef || t.status === 'Pending').length;
+                
+                if (incompleteCount > 0) {
+                    // Simulate fixing some transactions
+                    const fixedCount = Math.min(2, incompleteCount);
+                    
+                    addAIMessage('success', `Berhasil memperbaiki ${fixedCount} transaksi. ${incompleteCount - fixedCount} transaksi masih perlu diperiksa manual.`);
+                    
+                    // Update sample data to reflect fixes
+                    sampleData.transactions.forEach(t => {
+                        if (!t.docRef && t.status === 'Pending' && Math.random() > 0.5) {
+                            t.docRef = `DOC-AUTO-${Date.now().toString().slice(-4)}`;
+                            t.status = 'Lengkap';
+                        }
+                    });
+                    
+                    // Reload transactions table
+                    loadTransactions();
+                } else {
+                    addAIMessage('success', 'Tidak ada transaksi yang perlu diperbaiki. Semua data sudah lengkap!');
+                }
+            }, 2000);
+        }
+
+        function reviewSmallAmounts() {
+            addAIMessage('system', 'Menganalisis transaksi bernilai kecil...');
+            
+            setTimeout(() => {
+                const smallTransactions = sampleData.transactions.filter(t => t.income < 2000000);
+                
+                if (smallTransactions.length > 0) {
+                    addAIMessage('info', `Ditemukan ${smallTransactions.length} transaksi bernilai kecil. Sistem telah memverifikasi bahwa ${smallTransactions.filter(t => t.pph === 0).length} transaksi sudah sesuai aturan (tidak dikenakan PPh).`);
+                } else {
+                    addAIMessage('success', 'Tidak ditemukan transaksi bernilai kecil yang bermasalah.');
+                }
+            }, 1500);
+        }
+
+        function reviewHighValueTransactions() {
+            addAIMessage('system', 'Memeriksa transaksi bernilai tinggi...');
+            
+            setTimeout(() => {
+                const highValueTransactions = sampleData.transactions.filter(t => t.income > 10000000);
+                
+                if (highValueTransactions.length > 0) {
+                    addAIMessage('info', `Ditemukan ${highValueTransactions.length} transaksi bernilai tinggi. Semua telah melalui proses verifikasi dan dokumentasi lengkap.`);
+                } else {
+                    addAIMessage('info', 'Tidak ada transaksi bernilai tinggi yang perlu diperiksa khusus.');
+                }
+            }, 1500);
+        }
+
+        function formatDateID(dateString) {
+			const date = new Date(dateString);
+			const options = { 
+				day: '2-digit', 
+				month: 'short', 
+				year: 'numeric',
+				timeZone: 'Asia/Jakarta'
+			};
+			return date.toLocaleDateString('id-ID', options);
+		}
+
+        function exportXML() {
+            Swal.fire({
+                title: 'Export XML',
+                text: 'Memproses data untuk export...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            
+            setTimeout(() => {
+                // Generate XML content
+                const xmlContent = generateXML(sampleData.transactions);
+                downloadFile(xmlContent, 'arthapala-export.xml', 'text/xml');
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Export Berhasil',
+                    text: 'File XML telah diunduh',
+                    confirmButtonColor: '#16478A'
+                });
+            }, 1000);
+        }
+
+        function generateXML(transactions) {
+            const now = new Date();
+            let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<ArthapalaExport>\n`;
+            xml += `  <Metadata>\n`;
+            xml += `    <ExportDate>${now.toISOString().split('T')[0]}</ExportDate>\n`;
+            xml += `    <Period month="${(now.getMonth() + 1).toString().padStart(2, '0')}" year="${now.getFullYear()}"/>\n`;
+            xml += `  </Metadata>\n`;
+            xml += `  <Transactions>\n`;
+            
+            transactions.forEach(t => {
+                xml += `    <Transaction>\n`;
+                xml += `      <Type>${t.type}</Type>\n`;
+                xml += `      <MasaPajak>09</MasaPajak>\n`;
+                xml += `      <TahunPajak>2025</TahunPajak>\n`;
+                xml += `      <NIK>3201010101010001</NIK>\n`;
+                xml += `      <Nama>${t.taxpayer}</Nama>\n`;
+                xml += `      <ID_TKU>TKU-001</ID_TKU>\n`;
+                xml += `      <Penghasilan>${t.income}</Penghasilan>\n`;
+                xml += `      <Deemed>0.5</Deemed>\n`;
+                xml += `      <Tarif>0.05</Tarif>\n`;
+                xml += `      <PPh>${t.pph}</PPh>\n`;
+                xml += `      <NoDokRef>${t.docRef || 'N/A'}</NoDokRef>\n`;
+                xml += `      <TglDokRef>${t.date}</TglDokRef>\n`;
+                xml += `    </Transaction>\n`;
+            });
+            
+            xml += `  </Transactions>\n</ArthapalaExport>`;
+            return xml;
+        }
+
+        function exportCSV() {
+            const csvContent = generateCSV(sampleData.transactions);
+            downloadFile(csvContent, 'arthapala-export.csv', 'text/csv');
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Export CSV Berhasil',
+                text: 'File CSV telah diunduh',
+                confirmButtonColor: '#16478A'
+            });
+        }
+
+        function generateCSV(transactions) {
+            let csv = 'ID,Tanggal,Jenis,Wajib Pajak,Penghasilan,PPh,Status,Dokumen Referensi\n';
+            transactions.forEach(t => {
+                csv += `${t.id},${t.date},${t.type},"${t.taxpayer}",${t.income},${t.pph},${t.status},${t.docRef}\n`;
+            });
+            return csv;
+        }
+
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function editTransaction(id) {
+			const transaction = sampleData.transactions.find(t => t.id === id);
+			if (transaction) {
+				Swal.fire({
+					title: 'Edit Transaksi',
+					html: `Membuka editor untuk transaksi <strong>${id}</strong><br><br>
+						   <strong>Wajib Pajak:</strong> ${transaction.taxpayer}<br>
+						   <strong>Jenis:</strong> ${transaction.type}<br>
+						   <strong>Penghasilan:</strong> Rp ${transaction.income.toLocaleString('id-ID')}`,
+					icon: 'info',
+					showCancelButton: true,
+					confirmButtonText: 'Buka Editor',
+					cancelButtonText: 'Batal',
+					confirmButtonColor: '#16478A'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						// Simpan ID transaksi yang akan diedit di localStorage
+						localStorage.setItem('edit_transaction_id', id);
+						// Redirect ke halaman transaksi
+						window.location.href = 'transaksi.html';
+					}
+				});
+			} else {
+				Swal.fire({
+					title: 'Error',
+					text: `Transaksi dengan ID ${id} tidak ditemukan`,
+					icon: 'error',
+					confirmButtonColor: '#16478A'
+				});
+			}
+		}
+
+
+       // Fungsi untuk menampilkan detail transaksi
+		function viewDetails(id) {
+			console.log('View details clicked for:', id); // Debug log
+			
+			const transaction = sampleData.transactions.find(t => t.id === id);
+			if (transaction) {
+				// Tentukan warna badge berdasarkan status
+				let statusColor = 'success';
+				if (transaction.status === 'Pending') statusColor = 'warning';
+				if (transaction.status === 'Tidak Terutang') statusColor = 'secondary';
+				
+				// Tentukan ikon berdasarkan status
+				let statusIcon = 'check-circle';
+				if (transaction.status === 'Pending') statusIcon = 'exclamation-triangle';
+				if (transaction.status === 'Tidak Terutang') statusIcon = 'info-circle';
+				
+				Swal.fire({
+					title: `Detail Transaksi ${id}`,
+					html: `
+						<div class="text-start" style="max-height: 400px; overflow-y: auto;">
+							<div class="row">
+								<div class="col-12">
+									<div class="alert alert-${statusColor} d-flex align-items-center">
+										<i class="fas fa-${statusIcon} me-2"></i>
+										<strong>Status: ${transaction.status}</strong>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-6">
+									<strong>Tanggal:</strong><br>
+									${formatDateID(transaction.date)}
+								</div>
+								<div class="col-6">
+									<strong>Jenis Pajak:</strong><br>
+									<span class="badge bg-primary">${transaction.type}</span>
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-12">
+									<strong>Wajib Pajak:</strong><br>
+									${transaction.taxpayer}
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-6">
+									<strong>Penghasilan Bruto:</strong><br>
+									Rp ${transaction.income.toLocaleString('id-ID')}
+								</div>
+								<div class="col-6">
+									<strong>PPh Dipotong:</strong><br>
+									<span class="${transaction.pph === 0 ? 'text-danger' : 'text-success'}">
+										Rp ${transaction.pph.toLocaleString('id-ID')}
+									</span>
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-12">
+									<strong>Dokumen Referensi:</strong><br>
+									${transaction.docRef || '<span class="text-danger"><i class="fas fa-times-circle me-1"></i>Belum diisi</span>'}
+								</div>
+							</div>
+							${transaction.status === 'Tidak Terutang' ? `
+							<hr>
+							<div class="row">
+								<div class="col-12">
+									<div class="alert alert-info">
+										<i class="fas fa-info-circle me-2"></i>
+										<strong>Keterangan:</strong> Transaksi ini tidak dikenakan PPh karena nilai penghasilan kurang dari Rp 2.000.000 sesuai peraturan perpajakan.
+									</div>
+								</div>
+							</div>
+							` : ''}
+						</div>
+					`,
+					icon: 'info',
+					confirmButtonColor: '#16478A',
+					confirmButtonText: 'Tutup',
+					width: '600px',
+					showCloseButton: true,
+					customClass: {
+						popup: 'rounded-3'
+					}
+				});
+			} else {
+				Swal.fire({
+					title: 'Transaksi Tidak Ditemukan',
+					text: `Transaksi dengan ID ${id} tidak ditemukan dalam sistem.`,
+					icon: 'error',
+					confirmButtonColor: '#16478A'
+				});
+			}
+		}
+
+		// Fungsi untuk edit transaksi
+		function editTransaction(id) {
+			console.log('Edit transaction clicked for:', id); // Debug log
+			
+			const transaction = sampleData.transactions.find(t => t.id === id);
+			if (transaction) {
+				Swal.fire({
+					title: 'Edit Transaksi',
+					html: `
+						<div class="text-start">
+							<p>Anda akan mengedit transaksi:</p>
+							<div class="alert alert-info">
+								<strong>ID:</strong> ${transaction.id}<br>
+								<strong>Wajib Pajak:</strong> ${transaction.taxpayer}<br>
+								<strong>Jenis:</strong> ${transaction.type}<br>
+								<strong>Nilai:</strong> Rp ${transaction.income.toLocaleString('id-ID')}
+							</div>
+							<p>Transaksi akan dibuka di halaman input transaksi untuk diperbaiki.</p>
+						</div>
+					`,
+					icon: 'question',
+					showCancelButton: true,
+					confirmButtonText: 'Lanjutkan Edit',
+					cancelButtonText: 'Batal',
+					confirmButtonColor: '#16478A',
+					cancelButtonColor: '#6c757d',
+					reverseButtons: true
+				}).then((result) => {
+					if (result.isConfirmed) {
+						// Simpan ID transaksi yang akan diedit
+						localStorage.setItem('edit_transaction_id', id);
+						
+						// Tampilkan loading sebelum redirect
+						Swal.fire({
+							title: 'Membuka Editor',
+							text: 'Mengarahkan ke halaman edit...',
+							icon: 'info',
+							showConfirmButton: false,
+							timer: 1500,
+							willOpen: () => {
+								Swal.showLoading();
+							}
+						}).then(() => {
+							// Redirect ke halaman transaksi
+							window.location.href = 'transaksi.html';
+						});
+					}
+				});
+			} else {
+				Swal.fire({
+					title: 'Transaksi Tidak Ditemukan',
+					text: `Transaksi dengan ID ${id} tidak ditemukan.`,
+					icon: 'error',
+					confirmButtonColor: '#16478A'
+				});
+			}
+		}
+
+		// Fungsi bantuan format tanggal
+		function formatDateID(dateString) {
+			try {
+				const date = new Date(dateString);
+				if (isNaN(date.getTime())) {
+					return 'Tanggal tidak valid';
+				}
+				
+				const options = { 
+					day: '2-digit', 
+					month: 'long', 
+					year: 'numeric',
+					timeZone: 'Asia/Jakarta'
+				};
+				return date.toLocaleDateString('id-ID', options);
+			} catch (error) {
+				console.error('Error formatting date:', error);
+				return 'Tanggal tidak valid';
+			}
+		}
+
+		// Fungsi load transactions yang diperbaiki
+		function loadTransactions() {
+			const tbody = document.getElementById('transactionTable');
+			if (!tbody) {
+				console.error('Element transactionTable tidak ditemukan!');
+				return;
+			}
+			
+			tbody.innerHTML = '';
+			
+			// Sort transactions by date (newest first)
+			const sortedTransactions = [...sampleData.transactions].sort((a, b) => 
+				new Date(b.date) - new Date(a.date)
+			);
+			
+			sortedTransactions.forEach(transaction => {
+				const row = document.createElement('tr');
+				const statusBadge = transaction.status === 'Lengkap' ? 'success' : 
+								  transaction.status === 'Pending' ? 'warning' : 'secondary';
+				
+				row.innerHTML = `
+					<td><strong>${transaction.id}</strong></td>
+					<td>${formatDateID(transaction.date)}</td>
+					<td><span class="badge bg-primary">${transaction.type}</span></td>
+					<td>${transaction.taxpayer}</td>
+					<td>Rp ${transaction.income.toLocaleString('id-ID')}</td>
+					<td>
+						<span class="${transaction.pph === 0 ? 'text-danger fw-bold' : 'text-success fw-bold'}">
+							Rp ${transaction.pph.toLocaleString('id-ID')}
+						</span>
+					</td>
+					<td><span class="badge bg-${statusBadge}">${transaction.status}</span></td>
+					<td>
+						<div class="btn-group btn-group-sm" role="group">
+							<button type="button" class="btn btn-outline-primary" onclick="editTransaction('${transaction.id}')" title="Edit Transaksi">
+								<i class="fas fa-edit"></i>
+							</button>
+							<button type="button" class="btn btn-outline-info" onclick="viewDetails('${transaction.id}')" title="Lihat Detail">
+								<i class="fas fa-eye"></i>
+							</button>
+						</div>
+					</td>
+				`;
+				tbody.appendChild(row);
+			});
+			
+			console.log('Transactions loaded:', sortedTransactions.length); // Debug log
+		}
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        function toggleAI() {
+            const aiContent = document.getElementById('aiContent');
+            const aiToggleIcon = document.getElementById('aiToggleIcon');
+            
+            if (aiContent.style.display === 'none') {
+                aiContent.style.display = 'block';
+                aiToggleIcon.className = 'fas fa-minus';
+            } else {
+                aiContent.style.display = 'none';
+                aiToggleIcon.className = 'fas fa-plus';
+            }
+        }
+
+        function logout() {
+            Swal.fire({
+                title: 'Logout',
+                text: 'Apakah Anda yakin ingin keluar?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#16478A',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('arthapala_session');
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

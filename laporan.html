@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan & Ekspor - Arthapala</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #16478A;
+            --primary-yellow: #FFC107;
+            --light-blue: #1976D2;
+            --background: #F7FAFF;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background);
+        }
+        
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: var(--primary-blue);
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        
+        .sidebar-brand h4 {
+            color: var(--primary-yellow);
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--primary-yellow);
+        }
+        
+        .sidebar-menu i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+        
+        .top-header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .content-area {
+            padding: 2rem;
+        }
+        
+        .filter-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .report-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .export-actions {
+            background: var(--primary-blue);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        .export-button {
+            background: var(--primary-yellow);
+            border: none;
+            color: var(--primary-blue);
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            margin: 0.25rem;
+        }
+        
+        .export-button:hover {
+            background: #e0a800;
+            color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .table th {
+            background: #f8f9fa;
+            border: none;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        
+        .table td {
+            vertical-align: middle;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .filter-section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        .btn-filter {
+            background: var(--primary-blue);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-filter:hover {
+            background: #0d3a73;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .btn-reset {
+            background: #6c757d;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-reset:hover {
+            background: #545b62;
+            color: white;
+        }
+        
+        .xml-preview {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-left: -280px;
+            }
+            
+            .sidebar.show {
+                margin-left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .export-actions {
+                text-align: center;
+            }
+            
+            .export-button {
+                display: block;
+                margin: 0.5rem 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <h4><i class="fas fa-coins me-2"></i>Arthapala</h4>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="dashboard-asn.html">
+                <i class="fas fa-tachometer-alt"></i>Dashboard
+            </a>
+            <a href="transaksi.html">
+                <i class="fas fa-plus-circle"></i>Input Transaksi
+            </a>
+            <a href="referensi.html">
+                <i class="fas fa-database"></i>Referensi
+            </a>
+            <a href="laporan.html" class="active">
+                <i class="fas fa-file-export"></i>Laporan & Ekspor
+            </a>
+            <a href="kalkulator.html">
+                <i class="fas fa-calculator"></i>Kalkulator
+            </a>
+            <a href="settings.html">
+                <i class="fas fa-cog"></i>Pengaturan
+            </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Header -->
+        <div class="top-header">
+            <button class="btn btn-link d-md-none" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h5 class="mb-0">Laporan & Ekspor</h5>
+            <div class="user-info">
+                <span>ASN User</span>
+                <div class="user-avatar">AU</div>
+                <button class="btn btn-sm btn-outline-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Export Actions -->
+            <div class="export-actions">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="mb-2"><i class="fas fa-download me-2"></i>Ekspor Data</h5>
+                        <p class="mb-0">Unduh laporan dalam berbagai format sesuai kebutuhan</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <button class="export-button" onclick="exportXML()">
+                            <i class="fas fa-file-code me-2"></i>Export XML
+                        </button>
+                        <button class="export-button" onclick="exportCSV()">
+                            <i class="fas fa-file-csv me-2"></i>Export CSV
+                        </button>
+                        <button class="export-button" onclick="exportExcel()">
+                            <i class="fas fa-file-excel me-2"></i>Export Excel
+                        </button>
+                        <button class="export-button" onclick="previewXML()">
+                            <i class="fas fa-eye me-2"></i>Preview XML
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-card">
+                <h6 class="mb-3"><i class="fas fa-filter me-2"></i>Filter Laporan</h6>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label">Periode Dari</label>
+                            <input type="date" class="form-control" id="filterDateFrom">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label class="form-label">Periode Sampai</label>
+                            <input type="date" class="form-control" id="filterDateTo">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label class="form-label">Jenis PPh</label>
+                            <select class="form-select" id="filterJenisPPh">
+                                <option value="">Semua</option>
+                                <option value="PPh21">PPh 21</option>
+                                <option value="PPh22">PPh 22</option>
+                                <option value="PPh23">PPh 23</option>
+                                <option value="PPh Final UMKM">PPh Final</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="filterStatus">
+                                <option value="">Semua</option>
+                                <option value="Lengkap">Lengkap</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Tidak Terutang">Tidak Terutang</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-3">
+                            <label class="form-label">&nbsp;</label>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-filter flex-fill" onclick="applyFilter()">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <button class="btn btn-reset flex-fill" onclick="resetFilter()">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Stats -->
+            <div class="summary-stats" id="summaryStats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalTransaksi">0</div>
+                    <div class="stat-label">Total Transaksi</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalPPh">Rp 0</div>
+                    <div class="stat-label">Total PPh</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="transaksiLengkap">0</div>
+                    <div class="stat-label">Transaksi Lengkap</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="transaksiPending">0</div>
+                    <div class="stat-label">Transaksi Pending</div>
+                </div>
+            </div>
+
+            <!-- Report Table -->
+            <div class="report-card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="mb-0">Rekap Transaksi</h6>
+                    <div class="text-muted">
+                        <span id="recordCount">0 records</span>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID Transaksi</th>
+                                <th>Tanggal</th>
+                                <th>Jenis</th>
+                                <th>Wajib Pajak</th>
+                                <th>Penghasilan</th>
+                                <th>PPh</th>
+                                <th>Status</th>
+                                <th>Dokumen Ref</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTable">
+                            <!-- Data akan dimuat dari JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- XML Preview Modal -->
+    <div class="modal fade" id="xmlPreviewModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-file-code me-2"></i>
+                        Preview XML Export
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0">XML Structure Preview</h6>
+                        <button class="btn btn-sm btn-outline-primary" onclick="copyXMLToClipboard()">
+                            <i class="fas fa-copy me-1"></i>Copy XML
+                        </button>
+                    </div>
+                    <div class="xml-preview" id="xmlPreviewContent">
+                        <!-- XML content will be inserted here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary" onclick="downloadXMLFromPreview()">
+                        <i class="fas fa-download me-2"></i>Download XML
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.js"></script>
+    
+    <script>
+        // Global variables
+        let allTransactions = [];
+        let filteredTransactions = [];
+
+        // Check authentication and load data
+        window.onload = function() {
+            const session = localStorage.getItem('arthapala_session');
+            if (!session) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            loadTransactionData();
+            initializeDates();
+            updateSummaryStats();
+            loadReportTable();
+        };
+
+        function loadTransactionData() {
+            // Load from localStorage if exists, otherwise use sample data
+            const savedTransactions = localStorage.getItem('arthapala_transactions');
+            if (savedTransactions) {
+                allTransactions = JSON.parse(savedTransactions);
+            } else {
+                // Sample data for demonstration
+                allTransactions = [
+                    {
+                        id: 'TRX-001',
+                        date: '2025-09-20',
+                        type: 'PPh21',
+                        taxpayer: { name: 'Ahmad Faisal' },
+                        penghasilan: 5000000,
+                        pph: 125000,
+                        status: 'Lengkap',
+                        docRef: 'INV-001'
+                    },
+                    {
+                        id: 'TRX-002',
+                        date: '2025-09-21',
+                        type: 'PPh22',
+                        taxpayer: { name: 'PT Maju Bersama' },
+                        penghasilan: 15000000,
+                        pph: 101351,
+                        status: 'Lengkap',
+                        docRef: 'KTR-002'
+                    },
+                    {
+                        id: 'TRX-003',
+                        date: '2025-09-22',
+                        type: 'PPh23',
+                        taxpayer: { name: 'CV Teknologi Digital' },
+                        penghasilan: 8000000,
+                        pph: 80000,
+                        status: 'Pending',
+                        docRef: ''
+                    }
+                ];
+            }
+            
+            filteredTransactions = [...allTransactions];
+        }
+
+        function initializeDates() {
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            
+            document.getElementById('filterDateFrom').value = firstDay.toISOString().split('T')[0];
+            document.getElementById('filterDateTo').value = today.toISOString().split('T')[0];
+        }
+
+        function applyFilter() {
+            const dateFrom = document.getElementById('filterDateFrom').value;
+            const dateTo = document.getElementById('filterDateTo').value;
+            const jenisPPh = document.getElementById('filterJenisPPh').value;
+            const status = document.getElementById('filterStatus').value;
+
+            filteredTransactions = allTransactions.filter(transaction => {
+                let matchDate = true;
+                let matchType = true;
+                let matchStatus = true;
+
+                if (dateFrom && dateTo) {
+                    const transactionDate = new Date(transaction.date);
+                    const fromDate = new Date(dateFrom);
+                    const toDate = new Date(dateTo);
+                    matchDate = transactionDate >= fromDate && transactionDate <= toDate;
+                }
+
+                if (jenisPPh) {
+                    matchType = transaction.type === jenisPPh;
+                }
+
+                if (status) {
+                    matchStatus = transaction.status === status;
+                }
+
+                return matchDate && matchType && matchStatus;
+            });
+
+            updateSummaryStats();
+            loadReportTable();
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Filter Diterapkan',
+                text: `Ditemukan ${filteredTransactions.length} transaksi`,
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+
+        function resetFilter() {
+            document.getElementById('filterJenisPPh').value = '';
+            document.getElementById('filterStatus').value = '';
+            initializeDates();
+            
+            filteredTransactions = [...allTransactions];
+            updateSummaryStats();
+            loadReportTable();
+            
+            Swal.fire({
+                icon: 'info',
+                title: 'Filter Direset',
+                text: 'Menampilkan semua data',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+
+        function updateSummaryStats() {
+            const totalTransaksi = filteredTransactions.length;
+            const totalPPh = filteredTransactions.reduce((sum, t) => sum + (t.pph || 0), 0);
+            const transaksiLengkap = filteredTransactions.filter(t => t.status === 'Lengkap').length;
+            const transaksiPending = filteredTransactions.filter(t => t.status === 'Pending').length;
+
+            document.getElementById('totalTransaksi').textContent = totalTransaksi;
+            document.getElementById('totalPPh').textContent = 'Rp ' + totalPPh.toLocaleString('id-ID');
+            document.getElementById('transaksiLengkap').textContent = transaksiLengkap;
+            document.getElementById('transaksiPending').textContent = transaksiPending;
+        }
+
+        function loadReportTable() {
+            const tbody = document.getElementById('reportTable');
+            tbody.innerHTML = '';
+            
+            if (filteredTransactions.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-4">
+                            <i class="fas fa-inbox fa-2x mb-2"></i><br>
+                            Tidak ada data yang sesuai dengan filter
+                        </td>
+                    </tr>
+                `;
+                document.getElementById('recordCount').textContent = '0 records';
+                return;
+            }
+
+            filteredTransactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                const statusBadge = getStatusBadge(transaction.status);
+                const taxpayerName = transaction.taxpayer?.name || transaction.taxpayer || 'N/A';
+                
+                row.innerHTML = `
+                    <td><code>${transaction.id}</code></td>
+                    <td>${formatDate(transaction.date)}</td>
+                    <td><span class="badge bg-primary">${transaction.type}</span></td>
+                    <td>${taxpayerName}</td>
+                    <td>Rp ${(transaction.penghasilan || 0).toLocaleString('id-ID')}</td>
+                    <td>Rp ${(transaction.pph || 0).toLocaleString('id-ID')}</td>
+                    <td><span class="badge ${statusBadge.class}">${transaction.status}</span></td>
+                    <td>${transaction.docRef || '<span class="text-muted">-</span>'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('recordCount').textContent = `${filteredTransactions.length} records`;
+        }
+
+        function getStatusBadge(status) {
+            switch(status) {
+                case 'Lengkap':
+                    return { class: 'bg-success' };
+                case 'Pending':
+                    return { class: 'bg-warning' };
+                case 'Tidak Terutang':
+                    return { class: 'bg-secondary' };
+                default:
+                    return { class: 'bg-secondary' };
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID');
+        }
+
+        function exportXML() {
+            if (filteredTransactions.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Tidak Ada Data',
+                    text: 'Tidak ada transaksi untuk diekspor',
+                    confirmButtonColor: '#16478A'
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Export XML',
+                text: 'Memproses data untuk export...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            
+            setTimeout(() => {
+                const xmlContent = generateXML(filteredTransactions);
+                downloadFile(xmlContent, `arthapala-export-${new Date().toISOString().split('T')[0]}.xml`, 'text/xml');
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Export Berhasil',
+                    text: 'File XML telah diunduh',
+                    confirmButtonColor: '#16478A'
+                });
+            }, 1000);
+        }
+
+        function exportCSV() {
+            if (filteredTransactions.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Tidak Ada Data',
+                    text: 'Tidak ada transaksi untuk diekspor',
+                    confirmButtonColor: '#16478A'
+                });
+                return;
+            }
+
+            const csvContent = generateCSV(filteredTransactions);
+            downloadFile(csvContent, `arthapala-export-${new Date().toISOString().split('T')[0]}.csv`, 'text/csv');
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Export CSV Berhasil',
+                text: 'File CSV telah diunduh',
+                confirmButtonColor: '#16478A'
+            });
+        }
+
+        function exportExcel() {
+            if (filteredTransactions.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Tidak Ada Data',
+                    text: 'Tidak ada transaksi untuk diekspor',
+                    confirmButtonColor: '#16478A'
+                });
+                return;
+            }
+
+            // For simplicity, we'll export as CSV with .xlsx extension
+            // In a real application, you'd use a library like SheetJS
+            const csvContent = generateCSV(filteredTransactions);
+            downloadFile(csvContent, `arthapala-export-${new Date().toISOString().split('T')[0]}.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Export Excel Berhasil',
+                text: 'File Excel telah diunduh (format CSV)',
+                confirmButtonColor: '#16478A'
+            });
+        }
+
+        function previewXML() {
+            if (filteredTransactions.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Tidak Ada Data',
+                    text: 'Tidak ada transaksi untuk di-preview',
+                    confirmButtonColor: '#16478A'
+                });
+                return;
+            }
+
+            const xmlContent = generateXML(filteredTransactions);
+            document.getElementById('xmlPreviewContent').textContent = xmlContent;
+            
+            const modal = new bootstrap.Modal(document.getElementById('xmlPreviewModal'));
+            modal.show();
+        }
+
+        function generateXML(transactions) {
+            const now = new Date();
+            let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<ArthapalaExport>\n`;
+            xml += `  <Metadata>\n`;
+            xml += `    <ExportDate>${now.toISOString().split('T')[0]}</ExportDate>\n`;
+            xml += `    <ExportTime>${now.toTimeString().split(' ')[0]}</ExportTime>\n`;
+            xml += `    <Period month="${(now.getMonth() + 1).toString().padStart(2, '0')}" year="${now.getFullYear()}"/>\n`;
+            xml += `    <TotalRecords>${transactions.length}</TotalRecords>\n`;
+            xml += `    <TotalPPh>${transactions.reduce((sum, t) => sum + (t.pph || 0), 0)}</TotalPPh>\n`;
+            xml += `  </Metadata>\n`;
+            xml += `  <Transactions>\n`;
+            
+            transactions.forEach(t => {
+                const taxpayerName = t.taxpayer?.name || t.taxpayer || 'N/A';
+                xml += `    <Transaction id="${t.id}">\n`;
+                xml += `      <Type>${t.type}</Type>\n`;
+                xml += `      <Date>${t.date}</Date>\n`;
+                xml += `      <Taxpayer>${taxpayerName}</Taxpayer>\n`;
+                xml += `      <Penghasilan>${t.penghasilan || 0}</Penghasilan>\n`;
+                xml += `      <PPh>${t.pph || 0}</PPh>\n`;
+                xml += `      <Status>${t.status}</Status>\n`;
+                xml += `      <DocRef>${t.docRef || ''}</DocRef>\n`;
+                xml += `    </Transaction>\n`;
+            });
+            
+            xml += `  </Transactions>\n`;
+            xml += `  <Summary>\n`;
+            xml += `    <TotalTransactions>${transactions.length}</TotalTransactions>\n`;
+            xml += `    <ByStatus>\n`;
+            
+            const statusCounts = transactions.reduce((acc, t) => {
+                acc[t.status] = (acc[t.status] || 0) + 1;
+                return acc;
+            }, {});
+            
+            Object.entries(statusCounts).forEach(([status, count]) => {
+                xml += `      <${status.replace(/\s+/g, '')} count="${count}"/>\n`;
+            });
+            
+            xml += `    </ByStatus>\n`;
+            xml += `  </Summary>\n`;
+            xml += `</ArthapalaExport>`;
+            return xml;
+        }
+
+        function generateCSV(transactions) {
+            let csv = 'ID,Tanggal,Jenis,Wajib Pajak,Penghasilan,PPh,Status,Dokumen Referensi\n';
+            transactions.forEach(t => {
+                const taxpayerName = t.taxpayer?.name || t.taxpayer || 'N/A';
+                csv += `"${t.id}","${t.date}","${t.type}","${taxpayerName}",${t.penghasilan || 0},${t.pph || 0},"${t.status}","${t.docRef || ''}"\n`;
+            });
+            return csv;
+        }
+
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function copyXMLToClipboard() {
+            const xmlContent = document.getElementById('xmlPreviewContent').textContent;
+            navigator.clipboard.writeText(xmlContent).then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Tersalin',
+                    text: 'XML berhasil disalin ke clipboard',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }).catch(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal Menyalin',
+                    text: 'Tidak dapat menyalin ke clipboard',
+                    confirmButtonColor: '#16478A'
+                });
+            });
+        }
+
+        function downloadXMLFromPreview() {
+            const xmlContent = document.getElementById('xmlPreviewContent').textContent;
+            downloadFile(xmlContent, `arthapala-export-${new Date().toISOString().split('T')[0]}.xml`, 'text/xml');
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Download Berhasil',
+                text: 'File XML telah diunduh',
+                confirmButtonColor: '#16478A'
+            });
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        function logout() {
+            Swal.fire({
+                title: 'Logout',
+                text: 'Apakah Anda yakin ingin keluar?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#16478A',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('arthapala_session');
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.css">
+</body>
+</html>

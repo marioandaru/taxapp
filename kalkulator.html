@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Pajak - Arthapala</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #16478A;
+            --primary-yellow: #FFC107;
+            --light-blue: #1976D2;
+            --background: #F7FAFF;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background);
+        }
+        
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: var(--primary-blue);
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s;
+            overflow-y: auto;
+        }
+        
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        
+        .sidebar-brand h4 {
+            color: var(--primary-yellow);
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--primary-yellow);
+        }
+        
+        .sidebar-menu i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+        
+        .top-header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .content-area {
+            padding: 2rem;
+        }
+        
+        .calculator-tabs {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .nav-tabs {
+            border-bottom: none;
+            background: var(--primary-blue);
+        }
+        
+        .nav-tabs .nav-link {
+            border: none;
+            color: rgba(255,255,255,0.8);
+            font-weight: 500;
+            padding: 1rem 1.5rem;
+            border-radius: 0;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            color: white;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--primary-blue);
+            background: var(--primary-yellow);
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            padding: 2rem;
+        }
+        
+        .calculator-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary-yellow);
+        }
+        
+        .calculation-steps {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-top: 1rem;
+            border: 1px solid #e9ecef;
+        }
+        
+        .step-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .step-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+        }
+        
+        .step-number {
+            background: var(--primary-blue);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+        
+        .btn-calculate {
+            background: var(--primary-yellow);
+            border: none;
+            color: var(--primary-blue);
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-calculate:hover {
+            background: #e0a800;
+            color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 0.2rem rgba(22, 71, 138, 0.25);
+        }
+        
+        .threshold-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .result-highlight {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+        
+        .bypass-notice {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .reset-btn {
+            background: #6c757d;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        
+        .reset-btn:hover {
+            background: #5a6268;
+        }
+        
+        .calculator-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-left: -280px;
+            }
+            
+            .sidebar.show {
+                margin-left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .top-header {
+                padding: 1rem;
+            }
+            
+            .content-area {
+                padding: 1rem;
+            }
+            
+            .tab-content {
+                padding: 1rem;
+            }
+            
+            .calculator-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <h4><i class="fas fa-coins me-2"></i>Arthapala</h4>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="dashboard-asn.html">
+                <i class="fas fa-tachometer-alt"></i>Dashboard
+            </a>
+            <a href="transaksi.html">
+                <i class="fas fa-plus-circle"></i>Input Transaksi
+            </a>
+            <a href="referensi.html">
+                <i class="fas fa-database"></i>Referensi
+            </a>
+            <a href="laporan.html">
+                <i class="fas fa-file-export"></i>Laporan & Ekspor
+            </a>
+            <a href="kalkulator.html" class="active">
+                <i class="fas fa-calculator"></i>Kalkulator
+            </a>
+            <a href="settings.html">
+                <i class="fas fa-cog"></i>Pengaturan
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Header -->
+        <div class="top-header">
+            <button class="btn btn-link d-md-none" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h5 class="mb-0">Kalkulator Pajak</h5>
+            <div class="user-info">
+                <span>ASN User</span>
+                <div class="user-avatar">AU</div>
+                <button class="btn btn-sm btn-outline-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Bypass Login Notice -->
+            <div class="bypass-notice">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Mode Pengembangan:</strong> Web Apps ini sedang dalam mode pengembangan dan perlu selalu update peraturan perpajakan.
+            </div>
+            
+            <div class="calculator-tabs">
+                <ul class="nav nav-tabs" id="calculatorTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pph21-tab" data-bs-toggle="tab" data-bs-target="#pph21" type="button">
+                            <i class="fas fa-user me-2"></i>PPh 21
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pph22-tab" data-bs-toggle="tab" data-bs-target="#pph22" type="button">
+                            <i class="fas fa-shopping-cart me-2"></i>PPh 22
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pph23-tab" data-bs-toggle="tab" data-bs-target="#pph23" type="button">
+                            <i class="fas fa-handshake me-2"></i>PPh 23
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="final-tab" data-bs-toggle="tab" data-bs-target="#final" type="button">
+                            <i class="fas fa-store me-2"></i>PPh Final UMKM
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="calculatorTabsContent">
+                    <!-- PPh 21 Calculator -->
+                    <div class="tab-pane fade show active" id="pph21" role="tabpanel">
+                        <h6 class="text-primary mb-3"><i class="fas fa-user me-2"></i>Kalkulator PPh 21 - Pajak Penghasilan Pasal 21</h6>
+                        
+                        <div class="calculator-card">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Penghasilan Bruto</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="number" class="form-control" id="pph21_penghasilan" placeholder="0" min="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Deemed (%)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="pph21_deemed" step="0.01" placeholder="50" min="0" max="100">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tarif (%)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="pph21_tarif" step="0.01" placeholder="5" min="0" max="100">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Status PTKP (Referensi)</label>
+                                        <select class="form-select" id="pph21_ptkp">
+                                            <option value="">Pilih Status PTKP</option>
+                                            <option value="TK/0">TK/0 - Tidak Kawin (Rp54.000.000)</option>
+                                            <option value="TK/1">TK/1 - Tidak Kawin, 1 Tanggungan (Rp58.500.000)</option>
+                                            <option value="K/0">K/0 - Kawin (Rp58.500.000)</option>
+                                            <option value="K/1">K/1 - Kawin, 1 Tanggungan (Rp63.000.000)</option>
+                                            <option value="K/2">K/2 - Kawin, 2 Tanggungan (Rp67.500.000)</option>
+                                            <option value="K/3">K/3 - Kawin, 3 Tanggungan (Rp72.000.000)</option>
+                                        </select>
+                                        <small class="text-muted">*Untuk referensi, tidak mempengaruhi perhitungan</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 d-flex align-items-end">
+                                    <div class="calculator-actions">
+                                        <button class="btn btn-calculate" onclick="calculatePPh21()">
+                                            <i class="fas fa-calculator me-2"></i>Hitung PPh 21
+                                        </button>
+                                        <button class="btn reset-btn" onclick="resetPPh21()">
+                                            <i class="fas fa-redo me-2"></i>Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="pph21_result" style="display: none;">
+                            <div class="result-card">
+                                <h6 class="text-primary mb-3">Hasil Perhitungan PPh 21</h6>
+                                <div class="result-highlight" id="pph21_final_result">Rp 0</div>
+                                <small class="text-muted">Pajak Penghasilan Pasal 21 yang harus dipotong</small>
+                            </div>
+
+                            <div class="calculation-steps">
+                                <h6 class="mb-3">Langkah Perhitungan:</h6>
+                                <div id="pph21_steps"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PPh 22 Calculator -->
+                    <div class="tab-pane fade" id="pph22" role="tabpanel">
+                        <h6 class="text-primary mb-3"><i class="fas fa-shopping-cart me-2"></i>Kalkulator PPh 22 - Pembelian Barang</h6>
+                        
+                        <div class="calculator-card">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nilai Pembelian</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="number" class="form-control" id="pph22_penghasilan" placeholder="0" min="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Deemed (%)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="pph22_deemed" step="0.01" placeholder="50" min="0" max="100">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tarif (%)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="pph22_tarif" step="0.01" placeholder="1.5" min="0" max="100">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 offset-md-6">
+                                    <div class="calculator-actions">
+                                        <button class="btn btn-calculate" onclick="calculatePPh22()">
+                                            <i class="fas fa-calculator me-2"></i>Hitung PPh 22
+                                        </button>
+                                        <button class="btn reset-btn" onclick="resetPPh22()">
+                                            <i class="fas fa-redo me-2"></i>Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="pph22_result" style="display: none;">
+                            <!-- Results will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- PPh 23 Calculator -->
+                    <div class="tab-pane fade" id="pph23" role="tabpanel">
+                        <h6 class="text-primary mb-3"><i class="fas fa-handshake me-2"></i>Kalkulator PPh 23 - Jasa Konsultasi</h6>
+                        
+                        <div class="calculator-card">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nilai Jasa</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="number" class="form-control" id="pph23_penghasilan" placeholder="0" min="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Deemed (%)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="pph23_deemed" step="0.01" placeholder="50" min="0" max="100">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tarif (%)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="pph23_tarif" step="0.01" placeholder="2" min="0" max="100">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 offset-md-6">
+                                    <div class="calculator-actions">
+                                        <button class="btn btn-calculate" onclick="calculatePPh23()">
+                                            <i class="fas fa-calculator me-2"></i>Hitung PPh 23
+                                        </button>
+                                        <button class="btn reset-btn" onclick="resetPPh23()">
+                                            <i class="fas fa-redo me-2"></i>Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="pph23_result" style="display: none;">
+                            <!-- Results will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- PPh Final UMKM Calculator -->
+                    <div class="tab-pane fade" id="final" role="tabpanel">
+                        <h6 class="text-primary mb-3"><i class="fas fa-store me-2"></i>Kalkulator PPh Final UMKM</h6>
+                        
+                        <div class="calculator-card">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Omzet/Penghasilan</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="number" class="form-control" id="final_penghasilan" placeholder="0" min="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tarif Final (%)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="final_tarif" step="0.01" value="0.5" placeholder="0.5" min="0" max="100">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                        <small class="text-muted">*Tarif umum PPh Final UMKM 0.5%</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 offset-md-6">
+                                    <div class="calculator-actions">
+                                        <button class="btn btn-calculate" onclick="calculatePPhFinal()">
+                                            <i class="fas fa-calculator me-2"></i>Hitung PPh Final
+                                        </button>
+                                        <button class="btn reset-btn" onclick="resetPPhFinal()">
+                                            <i class="fas fa-redo me-2"></i>Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="final_result" style="display: none;">
+                            <!-- Results will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.js"></script>
+    
+    <script>
+        // ========== BYPASS LOGIN ==========
+        // Kode ini akan melewati proses login untuk pengembangan
+        // Hapus kode ini saat aplikasi siap untuk produksi
+        
+        // Cek apakah session sudah ada
+        const session = localStorage.getItem('arthapala_session');
+        
+        // Jika tidak ada session, buat session dummy untuk bypass login
+        if (!session) {
+            localStorage.setItem('arthapala_session', 'bypass_' + Date.now());
+            console.log('Bypass login aktif - Session dummy dibuat');
+        }
+        
+        // ========== END BYPASS LOGIN ==========
+        
+        // PPh 21 Calculator
+        function calculatePPh21() {
+            const penghasilan = parseFloat(document.getElementById('pph21_penghasilan').value) || 0;
+            const deemed = parseFloat(document.getElementById('pph21_deemed').value) || 0;
+            const tarif = parseFloat(document.getElementById('pph21_tarif').value) || 0;
+            
+            if (penghasilan === 0 || deemed === 0 || tarif === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Input Tidak Lengkap',
+                    text: 'Mohon isi semua field yang diperlukan',
+                    confirmButtonColor: '#16478A'
+                });
+                return;
+            }
+
+            // Calculate PPh 21 = Penghasilan × Deemed × Tarif
+            const deemedAmount = penghasilan * (deemed / 100);
+            const pph21 = deemedAmount * (tarif / 100);
+
+            // Display result
+            document.getElementById('pph21_final_result').textContent = `Rp ${formatRupiah(pph21)}`;
+            
+            // Display steps
+            const stepsHtml = `
+                <div class="step-item">
+                    <div class="d-flex align-items-center">
+                        <div class="step-number">1</div>
+                        <span>Penghasilan Bruto</span>
+                    </div>
+                    <span>Rp ${formatRupiah(penghasilan)}</span>
+                </div>
+                <div class="step-item">
+                    <div class="d-flex align-items-center">
+                        <div class="step-number">2</div>
+                        <span>Deemed ${deemed}%</span>
+                    </div>
+                    <span>Rp ${formatRupiah(deemedAmount)}</span>
+                </div>
+                <div class="step-item">
+                    <div class="d-flex align-items-center">
+                        <div class="step-number">3</div>
+                        <span>Tarif PPh 21 ${tarif}%</span>
+                    </div>
+                    <span>Rp ${formatRupiah(pph21)}</span>
+                </div>
+                <div class="step-item">
+                    <div class="d-flex align-items-center">
+                        <strong>PPh 21 Final</strong>
+                    </div>
+                    <strong>Rp ${formatRupiah(pph21)}</strong>
+                </div>
+            `;
+            
+            document.getElementById('pph21_steps').innerHTML = stepsHtml;
+            document.getElementById('pph21_result').style.display = 'block';
+            
+            // Scroll ke hasil
+            document.getElementById('pph21_result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // PPh 22 Calculator
+        function calculatePPh22() {
+            const penghasilan = parseFloat(document.getElementById('pph22_penghasilan').value) || 0;
+            const deemed = parseFloat(document.getElementById('pph22_deemed').value) || 0;
+            const tarif = parseFloat(document.getElementById('pph22_tarif').value) || 0;
+            
+            if (penghasilan === 0 || deemed === 0 || tarif === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Input Tidak Lengkap',
+                    text: 'Mohon isi semua field yang diperlukan',
+                    confirmButtonColor: '#16478A'
+                });
+                return;
+            }
+
+            let resultHtml = '';
+            
+            if (penghasilan < 2000000) {
+                // Not subject to tax
+                resultHtml = `
+                    <div class="threshold-warning">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Tidak Terutang PPh 22</strong><br>
+                        Nilai pembelian kurang dari Rp 2.000.000 tidak dikenakan PPh 22 sesuai aturan.
+                    </div>
+                    <div class="result-card">
+                        <h6 class="text-primary mb-3">Hasil Perhitungan PPh 22</h6>
+                        <div class="result-highlight">Rp 0</div>
+                        <small class="text-muted">Tidak ada PPh 22 yang harus dipotong</small>
+                    </div>
+                `;
+            } else {
+                // Calculate PPh 22
+                const dpp = (100/111) * penghasilan;
+                const pph22 = dpp * (deemed/100) * (tarif/100);
+                const dppNilaiLain = (11/12) * dpp;
+                const ppn = dppNilaiLain * 0.12;
+                
+                const stepsHtml = `
+                    <div class="step-item">
+                        <div class="d-flex align-items-center">
+                            <div class="step-number">1</div>
+                            <span>Nilai Pembelian</span>
+                        </div>
+                        <span>Rp ${formatRupiah(penghasilan)}</span>
+                    </div>
+                    <div class="step-item">
+                        <div class="d-flex align-items-center">
+                            <div class="step-number">2</div>
+                            <span>DPP = (100/111) × Pembelian</span>
+                        </div>
+                        <span>Rp ${formatRupiah(dpp)}</span>
+                    </div>
+                    <div class="step-item">
+                        <div class="d-flex align-items-center">
+                            <div class="step-number">3</div>
+                            <span>PPh 22 = DPP × ${deemed}% × ${tarif}%</span>
+                        </div>
+                        <span>Rp ${formatRupiah(pph22)}</span>
+                    </div>
+                    <div class="step-item">
+                        <div class="d-flex align-items-center">
+                            <div class="step-number">4</div>
+                            <span>DPP Nilai Lain = (11/12) × DPP</span>
+                        </div>
+                        <span>Rp ${formatRupiah(dppNilaiLain)}</span>
+                    </div>
+                    <div class="step-item">
+                        <div class="d-flex align-items-center">
+                            <div class="step-number">5</div>
+                            <span>PPN 12%</span>
+                        </div>
+                        <span>Rp ${formatRupiah(ppn)}</span>
+                    </div>
+                    <div class="step-item">
+                        <div class="d-flex align-items-center">
+                            <strong>PPh 22 Final</strong>
+                        </div>
+                        <strong>Rp ${formatRupiah(pph22)}</strong>
+                    </div>
+                `;
+                
+                resultHtml = `
+                    <div class="result-card">
+                        <h6 class="text-primary mb-3">Hasil Perhitungan PPh 22</h6>
+                        <div class="result-highlight">Rp ${formatRupiah(pph22)}</div>
+                        <small class="text-muted">PPh 22 yang harus dipotong</small>
+                        <div class="mt-2">
+                            <small class="text-muted">PPN: Rp ${formatRupiah(ppn)}</small>
+                        </div>
+                    </div>
+                    <div class="calculation-steps">
+                        <h6 class="mb-3">Langkah Perhitungan:</h6>
+                        ${stepsHtml}
+                    </div>
+                `;
+            }
+            
+            document.getElementById('pph22_result').innerHTML = resultHtml;
+            document.getElementById('pph22_result').style.display = 'block';
+            
+            // Scroll ke hasil
+            document.getElementById('pph22_result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // PPh 23 Calculator
+        function calculatePPh23() {
+            const penghasilan = parseFloat(document.getElementById('pph23_penghasilan').value) || 0;
+            const deemed = parseFloat(document.getElementById('pph23_deemed').value) || 0;
+            const tarif = parseFloat(document.getElementById('pph23_tarif').value) || 0;
+            
+            if (penghasilan === 0 || deemed === 0 || tarif === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Input Tidak Lengkap',
+                    text: 'Mohon isi semua field yang diperlukan',
+                    confirmButtonColor: '#16478A'
+                });
+                return;
+            }
+
+            let resultHtml = '';
+            
+            if (penghasilan < 2000000) {
+                // Not subject to tax
+                resultHtml = `
+                    <div class="threshold-warning">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Tidak Terutang PPh 23</strong><br>
+                        Nilai jasa kurang dari Rp 2.000.000 tidak dikenakan PPh 23 sesuai aturan.
+                    </div>
+                    <div class="result-card">
+                        <h6 class="text-primary mb-3">Hasil Perhitungan PPh 23</h6>
+                        <div class="result-highlight">Rp 0</div>
+                        <small class="text-muted">Tidak ada PPh 23 yang harus dipotong</small>
+                    </div>
+                `;
+            } else {
+                // Calculate PPh 23 = Penghasilan × Deemed × Tarif
+                const deemedAmount = penghasilan * (deemed / 100);
+                const pph23 = deemedAmount * (tarif / 100);
+                
+                const stepsHtml = `
+                    <div class="step-item">
+                        <div class="d-flex align-items-center">
+                            <div class="step-number">1</div>
+                            <span>Nilai Jasa</span>
+                        </div>
+                        <span>Rp ${formatRupiah(penghasilan)}</span>
+                    </div>
+                    <div class="step-item">
+                        <div class="d-flex align-items-center">
+                            <div class="step-number">2</div>
+                            <span>Deemed ${deemed}%</span>
+                        </div>
+                        <span>Rp ${formatRupiah(deemedAmount)}</span>
+                    </div>
+                    <div class="step-item">
+                        <div class="d-flex align-items-center">
+                            <div class="step-number">3</div>
+                            <span>Tarif PPh 23 ${tarif}%</span>
+                        </div>
+                        <span>Rp ${formatRupiah(pph23)}</span>
+                    </div>
+                    <div class="step-item">
+                        <div class="d-flex align-items-center">
+                            <strong>PPh 23 Final</strong>
+                        </div>
+                        <strong>Rp ${formatRupiah(pph23)}</strong>
+                    </div>
+                `;
+                
+                resultHtml = `
+                    <div class="result-card">
+                        <h6 class="text-primary mb-3">Hasil Perhitungan PPh 23</h6>
+                        <div class="result-highlight">Rp ${formatRupiah(pph23)}</div>
+                        <small class="text-muted">PPh 23 yang harus dipotong</small>
+                    </div>
+                    <div class="calculation-steps">
+                        <h6 class="mb-3">Langkah Perhitungan:</h6>
+                        ${stepsHtml}
+                    </div>
+                `;
+            }
+            
+            document.getElementById('pph23_result').innerHTML = resultHtml;
+            document.getElementById('pph23_result').style.display = 'block';
+            
+            // Scroll ke hasil
+            document.getElementById('pph23_result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // PPh Final UMKM Calculator
+        function calculatePPhFinal() {
+            const penghasilan = parseFloat(document.getElementById('final_penghasilan').value) || 0;
+            const tarif = parseFloat(document.getElementById('final_tarif').value) || 0;
+            
+            if (penghasilan === 0 || tarif === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Input Tidak Lengkap',
+                    text: 'Mohon isi semua field yang diperlukan',
+                    confirmButtonColor: '#16478A'
+                });
+                return;
+            }
+
+            // Calculate PPh Final = Penghasilan × Tarif Final
+            const pphFinal = penghasilan * (tarif / 100);
+            
+            const stepsHtml = `
+                <div class="step-item">
+                    <div class="d-flex align-items-center">
+                        <div class="step-number">1</div>
+                        <span>Omzet/Penghasilan</span>
+                    </div>
+                    <span>Rp ${formatRupiah(penghasilan)}</span>
+                </div>
+                <div class="step-item">
+                    <div class="d-flex align-items-center">
+                        <div class="step-number">2</div>
+                        <span>Tarif Final ${tarif}%</span>
+                    </div>
+                    <span>Rp ${formatRupiah(pphFinal)}</span>
+                </div>
+                <div class="step-item">
+                    <div class="d-flex align-items-center">
+                        <strong>PPh Final UMKM</strong>
+                    </div>
+                    <strong>Rp ${formatRupiah(pphFinal)}</strong>
+                </div>
+            `;
+            
+            const resultHtml = `
+                <div class="result-card">
+                    <h6 class="text-primary mb-3">Hasil Perhitungan PPh Final UMKM</h6>
+                    <div class="result-highlight">Rp ${formatRupiah(pphFinal)}</div>
+                    <small class="text-muted">PPh Final UMKM yang harus dibayar</small>
+                </div>
+                <div class="calculation-steps">
+                    <h6 class="mb-3">Langkah Perhitungan:</h6>
+                    ${stepsHtml}
+                </div>
+            `;
+            
+            document.getElementById('final_result').innerHTML = resultHtml;
+            document.getElementById('final_result').style.display = 'block';
+            
+            // Scroll ke hasil
+            document.getElementById('final_result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Reset functions
+        function resetPPh21() {
+            document.getElementById('pph21_penghasilan').value = '';
+            document.getElementById('pph21_deemed').value = '';
+            document.getElementById('pph21_tarif').value = '';
+            document.getElementById('pph21_ptkp').value = '';
+            document.getElementById('pph21_result').style.display = 'none';
+        }
+        
+        function resetPPh22() {
+            document.getElementById('pph22_penghasilan').value = '';
+            document.getElementById('pph22_deemed').value = '';
+            document.getElementById('pph22_tarif').value = '';
+            document.getElementById('pph22_result').style.display = 'none';
+        }
+        
+        function resetPPh23() {
+            document.getElementById('pph23_penghasilan').value = '';
+            document.getElementById('pph23_deemed').value = '';
+            document.getElementById('pph23_tarif').value = '';
+            document.getElementById('pph23_result').style.display = 'none';
+        }
+        
+        function resetPPhFinal() {
+            document.getElementById('final_penghasilan').value = '';
+            document.getElementById('final_tarif').value = '0.5';
+            document.getElementById('final_result').style.display = 'none';
+        }
+
+        // Helper function untuk format Rupiah
+        function formatRupiah(angka) {
+            return angka.toLocaleString('id-ID');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        function logout() {
+            Swal.fire({
+                title: 'Logout',
+                text: 'Apakah Anda yakin ingin keluar?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#16478A',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('arthapala_session');
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+        
+        // Auto-hide sidebar di mobile saat klik di luar
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const isClickInsideSidebar = sidebar.contains(event.target);
+            const isClickOnMenuButton = event.target.closest('.btn-link') !== null;
+            
+            if (!isClickInsideSidebar && !isClickOnMenuButton && window.innerWidth < 768) {
+                sidebar.classList.remove('show');
+            }
+        });
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.css">
+</body>
+</html>

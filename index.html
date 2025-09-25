@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arthapala - Aplikasi Rekam dan Tata Harta Pajak Daerah</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #16478A;
+            --primary-yellow: #FFC107;
+            --light-blue: #1976D2;
+            --background: #F7FAFF;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, #E3F2FD 100%);
+            min-height: 100vh;
+        }
+        
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1.5rem;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(22, 71, 138, 0.3);
+        }
+        
+        .logo svg {
+            width: 60px;
+            height: 60px;
+            fill: var(--primary-yellow);
+        }
+        
+        .app-title {
+            color: var(--primary-blue);
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .app-tagline {
+            color: #6c757d;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary-custom {
+            background: var(--primary-blue);
+            border: none;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s;
+			color: white;
+        }
+        
+        .btn-primary-custom:hover {
+            background: #0d3a73;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(22, 71, 138, 0.3);
+        }
+        
+        .btn-outline-custom {
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            padding: 1rem 2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            background: white;
+            transition: all 0.3s;
+        }
+        
+        .btn-outline-custom:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(22, 71, 138, 0.3);
+        }
+        
+        .credentials-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 3rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary-yellow);
+        }
+        
+        .credentials-title {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .credential-item {
+            background: #f8f9fa;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-family: monospace;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10">
+                    <div class="logo-container">
+                        <div class="logo">
+                            <svg viewBox="0 0 100 100">
+                                <text x="50" y="65" text-anchor="middle" font-size="60" font-weight="bold" font-family="Poppins">A</text>
+                            </svg>
+                        </div>
+                        <h1 class="app-title">Arthapala</h1>
+                        <p class="app-tagline">Aplikasi Rekam dan Tata Harta Pajak Daerah</p>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary-custom btn-lg" onclick="showLogin()">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Login ASN
+                        </button>
+                        <a href="dashboard-public.html" class="btn btn-outline-custom btn-lg">
+                            <i class="fas fa-chart-line me-2"></i>
+                            Dashboard Publik
+                        </a>
+                    </div>
+                    
+                    <div class="credentials-card">
+                        <h5 class="credentials-title">
+                            <i class="fas fa-key me-2"></i>
+                            Dummy Credentials untuk Testing
+                        </h5>
+                        <div class="credential-item">
+                            <strong>Email:</strong> asn1@pemda.go.id
+                        </div>
+                        <div class="credential-item">
+                            <strong>Password:</strong> Arthapala123!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background: var(--primary-blue); color: white;">
+                    <h5 class="modal-title">
+                        <i class="fas fa-user-shield me-2"></i>
+                        Login ASN
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary-custom">
+                                <i class="fas fa-sign-in-alt me-2"></i>
+                                Masuk
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.js"></script>
+    
+    <script>
+        function showLogin() {
+            const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+            loginModal.show();
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Dummy credentials validation
+            if (email === 'asn1@pemda.go.id' && password === 'Arthapala123!') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Login Berhasil',
+                    text: 'Selamat datang di Arthapala!',
+                    confirmButtonColor: '#16478A'
+                }).then(() => {
+                    // Store login session
+                    localStorage.setItem('arthapala_session', JSON.stringify({
+                        user: 'ASN User',
+                        email: email,
+                        role: 'ASN',
+                        loginTime: new Date().toISOString()
+                    }));
+                    
+                    window.location.href = 'dashboard-asn.html';
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Gagal',
+                    text: 'Email atau password salah!',
+                    confirmButtonColor: '#16478A'
+                });
+            }
+        });
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.css">
+</body>
+</html>

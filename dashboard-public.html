@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Publik - Arthapala</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #16478A;
+            --primary-yellow: #FFC107;
+            --light-blue: #1976D2;
+            --background: #F7FAFF;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background);
+        }
+        
+        .top-banner {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .banner-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .banner-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .banner-year {
+            background: var(--primary-yellow);
+            color: var(--primary-blue);
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .kpi-section {
+            padding: 4rem 0;
+            background: white;
+        }
+        
+        .kpi-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            border-top: 4px solid var(--primary-yellow);
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .kpi-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+        
+        .kpi-label {
+            color: #6c757d;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .kpi-trend {
+            font-size: 0.9rem;
+        }
+        
+        .trend-up {
+            color: #28a745;
+        }
+        
+        .trend-down {
+            color: #dc3545;
+        }
+        
+        .charts-section {
+            padding: 4rem 0;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            position: relative;
+			max-height: 400px;
+			height: 100%
+        }
+        
+        .chart-controls {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chart-control-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .chart-control-btn:hover {
+            background: var(--light-blue);
+        }
+        
+        .ai-public-panel {
+            background: linear-gradient(135deg, var(--primary-yellow) 0%, #ffeb3b 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 20px rgba(255, 193, 7, 0.3);
+        }
+        
+        .ai-public-header {
+            color: var(--primary-blue);
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .ai-public-message {
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .ai-explanation {
+            color: rgba(22, 71, 138, 0.8);
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+        
+        .download-section {
+            background: var(--primary-blue);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .btn-download {
+            background: var(--primary-yellow);
+            color: var(--primary-blue);
+            border: none;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-download:hover {
+            background: #e0a800;
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+        }
+        
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .back-link:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .year-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            gap: 10px;
+        }
+        
+        .year-btn {
+            background: white;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .year-btn.active {
+            background: var(--primary-blue);
+            color: white;
+        }
+        
+        .year-btn:hover:not(.active) {
+            background: rgba(22, 71, 138, 0.1);
+        }
+        
+        .modal-chart {
+            max-width: 90%;
+        }
+        
+        .modal-chart canvas {
+            max-height: 70vh;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">
+        <i class="fas fa-arrow-left me-2"></i>Kembali
+    </a>
+
+    <section class="top-banner">
+        <div class="container">
+            <h1 class="banner-title">
+                <i class="fas fa-chart-line me-3"></i>
+                Dashboard Publik Arthapala
+            </h1>
+            <p class="banner-subtitle">
+                Transparansi Pengelolaan Pajak Daerah Real-time
+            </p>
+            <div class="banner-year">Tahun Anggaran <span id="currentYear">2025</span></div>
+        </div>
+    </section>
+
+    <section class="container mt-4">
+        <div class="year-selector" id="yearSelector">
+            </div>
+    </section>
+
+    <section class="kpi-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="kpi-card">
+                        <div class="kpi-number pulse" id="totalPajakTahun">Rp 0 M</div>
+                        <div class="kpi-label">Total Pajak Tahun Ini</div>
+                        <div class="kpi-trend trend-up" id="trendTotalPajak">
+                            <i class="fas fa-arrow-up me-1"></i>
+                            <span id="trendTotalText">+0% vs tahun lalu</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="kpi-card">
+                        <div class="kpi-number pulse" id="peningkatanYoy">0%</div>
+                        <div class="kpi-label">Peningkatan YoY</div>
+                        <div class="kpi-trend trend-up" id="trendYoy">
+                            <i class="fas fa-trending-up me-1"></i>
+                            <span id="trendYoyText">Target tercapai 0%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="kpi-card">
+                        <div class="kpi-number pulse" id="jumlahVendor">0</div>
+                        <div class="kpi-label">Vendor Terdaftar</div>
+                        <div class="kpi-trend trend-up" id="trendVendor">
+                            <i class="fas fa-plus-circle me-1"></i>
+                            <span id="trendVendorText">+0 vendor baru bulan ini</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="ai-public-panel">
+            <div class="ai-public-header">
+                <i class="fas fa-robot me-2"></i>
+                Arthapala AI - Status Harian
+            </div>
+            <div class="ai-public-message" id="aiPublicMessage">
+                Memuat analisis terkini...
+            </div>
+            <div class="ai-explanation" id="aiExplanation">
+                Analisis berdasarkan tren penerimaan bulan terakhir.
+            </div>
+            <button class="btn btn-outline-primary mt-3" onclick="showDetailedCharts()">
+                <i class="fas fa-chart-bar me-2"></i>Lihat Detail Grafik
+            </button>
+        </div>
+    </section>
+
+    <section class="charts-section" id="chartsSection">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mb-4">
+                    <div class="chart-container">
+                        <h5 class="mb-3">
+                            <i class="fas fa-line-chart me-2 text-primary"></i>
+                            Tren Penerimaan Bulanan <span id="trendYearLabel">2025</span>
+                        </h5>
+                        <div class="chart-controls">
+                            <button class="chart-control-btn" onclick="toggleFullScreen('publicTrendChart')">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        <canvas id="publicTrendChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="chart-container">
+                        <h5 class="mb-3">
+                            <i class="fas fa-pie-chart me-2 text-primary"></i>
+                            Komposisi per Jenis PPh <span id="pieYearLabel">2025</span>
+                        </h5>
+                        <div class="chart-controls">
+                            <button class="chart-control-btn" onclick="toggleFullScreen('publicPieChart')">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        <canvas id="publicPieChart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="chart-container">
+                        <h5 class="mb-3">
+                            <i class="fas fa-bar-chart me-2 text-primary"></i>
+                            Perbandingan Target vs Realisasi <span id="targetYearLabel">2025</span>
+                        </h5>
+                        <div class="chart-controls">
+                            <button class="chart-control-btn" onclick="toggleFullScreen('targetChart')">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        <canvas id="targetChart" height="150"></canvas>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="chart-container">
+                        <h5 class="mb-3">
+                            <i class="fas fa-area-chart me-2 text-primary"></i>
+                            Pertumbuhan Vendor Aktif <span id="vendorYearLabel">2025</span>
+                        </h5>
+                        <div class="chart-controls">
+                            <button class="chart-control-btn" onclick="toggleFullScreen('vendorChart')">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        <canvas id="vendorChart" height="150"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="download-section">
+        <div class="container">
+            <h3 class="mb-3">
+                <i class="fas fa-download me-2"></i>
+                Unduh Data Terbuka
+            </h3>
+            <p class="mb-4">
+                Akses data agregat pajak daerah dalam format yang mudah dianalisis
+            </p>
+            <button class="btn btn-download" onclick="downloadOpenData()">
+                <i class="fas fa-file-excel me-2"></i>
+                Unduh Data Excel (Anonim)
+            </button>
+        </div>
+    </section>
+
+    <div class="modal fade" id="chartModal" tabindex="-1" aria-labelledby="chartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-chart">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="chartModalLabel">Detail Grafik</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <canvas id="modalChartCanvas"></canvas>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <script>
+        // Global variables
+		let chartConfigs = {};
+        let currentYear = new Date().getFullYear();
+        let selectedYear = currentYear;
+        let chartInstances = {};
+        let chartData = {};
+        
+        // Initialize when page loads
+        window.onload = function() {
+            updateCurrentYear();
+            generateYearSelector();
+            initializeChartData();
+            updateDashboard();
+        };
+
+        // Update current year in the banner
+        function updateCurrentYear() {
+            document.getElementById('currentYear').textContent = currentYear;
+        }
+
+        // Generate year selector buttons
+        function generateYearSelector() {
+            const yearSelector = document.getElementById('yearSelector');
+            yearSelector.innerHTML = '';
+            
+            // Create buttons for current year and previous 4 years
+            for (let i = 4; i >= 0; i--) {
+                const year = currentYear - i;
+                const button = document.createElement('button');
+                button.className = `year-btn ${year === selectedYear ? 'active' : ''}`;
+                button.textContent = year;
+                button.onclick = () => selectYear(year);
+                yearSelector.appendChild(button);
+            }
+        }
+
+        // Select a year and update the dashboard
+        function selectYear(year) {
+            selectedYear = year;
+            
+            // Update active button
+            document.querySelectorAll('.year-btn').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.textContent) === year);
+            });
+            
+            // Update dashboard
+            updateDashboard();
+        }
+
+        // Initialize chart data for different years
+        function initializeChartData() {
+            // Generate data for the last 5 years
+            for (let year = currentYear - 4; year <= currentYear; year++) {
+                chartData[year] = generateYearData(year);
+            }
+        }
+
+        // Generate sample data for a specific year
+        function generateYearData(year) {
+            const baseValue = 80 + (year - currentYear + 4) * 10; // Increase base value for more recent years
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+            
+            // Generate trend data with some randomness
+            const currentYearData = [];
+            let value = baseValue;
+            for (let i = 0; i < 12; i++) {
+                // Add some randomness to the trend
+                const randomFactor = 0.9 + Math.random() * 0.2;
+                value = value * randomFactor;
+                currentYearData.push(Math.round(value));
+            }
+            
+            // Generate previous year data (slightly lower)
+            const prevYearData = currentYearData.map(v => Math.round(v * (0.8 + Math.random() * 0.2)));
+            
+            // Generate pie chart data
+            const pieData = [
+                Math.round(40 + Math.random() * 10), // PPh 21
+                Math.round(25 + Math.random() * 10), // PPh 22
+                Math.round(15 + Math.random() * 10), // PPh 23
+                Math.round(5 + Math.random() * 5)    // PPh Final
+            ];
+            
+            // Generate target vs realization data
+            const targetData = [
+                Math.round(500 + Math.random() * 50),  // PPh 21
+                Math.round(300 + Math.random() * 40),  // PPh 22
+                Math.round(200 + Math.random() * 30),  // PPh 23
+                Math.round(50 + Math.random() * 20)    // PPh Final
+            ];
+            
+            const realizationData = targetData.map((target, i) => {
+                const performance = 0.9 + Math.random() * 0.2; // 90-110% of target
+                return Math.round(target * performance);
+            });
+            
+            // Generate vendor growth data
+            const vendorData = [];
+            let vendorCount = 180 + (year - currentYear + 4) * 15; // Increase base vendor count for more recent years
+            for (let i = 0; i < 12; i++) {
+                vendorCount += Math.round(3 + Math.random() * 4);
+                vendorData.push(vendorCount);
+            }
+            
+            return {
+                months: months,
+                trendData: {
+                    current: currentYearData,
+                    previous: prevYearData
+                },
+                pieData: pieData,
+                targetData: {
+                    target: targetData,
+                    realization: realizationData
+                },
+                vendorData: vendorData,
+                kpiData: {
+                    totalPajak: currentYearData.reduce((a, b) => a + b, 0) * 1000000, // Convert to full Rupiah
+                    peningkatanYoy: ((currentYearData[8] - prevYearData[8]) / prevYearData[8] * 100).toFixed(1),
+                    jumlahVendor: vendorData[8],
+                    vendorBulanIni: vendorData[8] - vendorData[7]
+                }
+            };
+        }
+
+        // Update the entire dashboard with data for the selected year
+        function updateDashboard() {
+            const data = chartData[selectedYear];
+            
+            // Update KPI numbers
+            animateNumbers(data.kpiData);
+            
+            // Update chart labels
+            document.getElementById('trendYearLabel').textContent = selectedYear;
+            document.getElementById('pieYearLabel').textContent = selectedYear;
+            document.getElementById('targetYearLabel').textContent = selectedYear;
+            document.getElementById('vendorYearLabel').textContent = selectedYear;
+            
+            // Update charts
+            initPublicCharts();
+            
+            // Update AI insight
+            runPublicAI();
+        }
+
+		
+		
+        // Animate numbers on load or year change
+        function animateNumbers(kpiData) {
+			const totalPajakM = kpiData.totalPajak / 1000000000; // Konversi ke Miliar
+            animateValue('totalPajakTahun', 0, totalPajakM, 2000, (val) => 'Rp ' + val.toFixed(1) + ' M');
+            animateValue('peningkatanYoy', 0, parseFloat(kpiData.peningkatanYoy), 1500, (val) => val.toFixed(1) + '%');
+            animateValue('jumlahVendor', 0, kpiData.jumlahVendor, 1800, 
+				(val) => Math.round(val).toString()); // Memastikan angkanya bulat selama animasi
+            
+            // Update trend texts
+            const trendTotal = document.getElementById('trendTotalText');
+            const trendYoy = document.getElementById('trendYoyText');
+            const trendVendor = document.getElementById('trendVendorText');
+            
+            const isPositive = parseFloat(kpiData.peningkatanYoy) > 0;
+            trendTotal.textContent = `${isPositive ? '+' : ''}${kpiData.peningkatanYoy}% vs tahun lalu`;
+            trendTotal.parentElement.className = `kpi-trend ${isPositive ? 'trend-up' : 'trend-down'}`;
+            trendTotal.parentElement.querySelector('i').className = `fas ${isPositive ? 'fa-arrow-up' : 'fa-arrow-down'} me-1`;
+            
+            const targetAchievement = Math.round((kpiData.totalPajak / (chartData[selectedYear].targetData.target.reduce((a, b) => a + b, 0) * 1000000)) * 100);
+            trendYoy.textContent = `Target tercapai ${targetAchievement}%`;
+            
+            trendVendor.textContent = `+${kpiData.vendorBulanIni} vendor baru bulan ini`;
+        }
+
+        function animateValue(id, start, end, duration, formatter) {
+            const element = document.getElementById(id);
+            const startTime = Date.now();
+            
+            function update() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const current = start + (end - start) * easeOutCubic(progress);
+                
+                element.textContent = formatter(current);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            update();
+        }
+
+        function easeOutCubic(t) {
+            return 1 - Math.pow(1 - t, 3);
+        }
+
+        function initPublicCharts() {
+            const data = chartData[selectedYear];
+            const prevYearData = chartData[selectedYear - 1];
+			
+			// Hancurkan chart lama
+			Object.values(chartInstances).forEach(chart => {
+				if (chart) chart.destroy();
+			});
+            
+            // --- 1. Konfigurasi Tren Bulanan (Line Chart) ---
+            const trendCtx = document.getElementById('publicTrendChart').getContext('2d');
+            const trendConfig = {
+                type: 'line',
+                data: {
+                    labels: data.months,
+                    datasets: [
+                        {
+                            label: selectedYear.toString(),
+                            data: data.trendData.current,
+                            borderColor: '#16478A',
+                            backgroundColor: 'rgba(22, 71, 138, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: (selectedYear - 1).toString(),
+                            data: prevYearData ? prevYearData.trendData.current : data.trendData.previous,
+                            borderColor: '#FFC107',
+                            backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Juta Rupiah'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': Rp ' + context.parsed.y + ' Juta';
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            chartInstances.trend = new Chart(trendCtx, trendConfig);
+            chartConfigs.trend = trendConfig; // Simpan konfigurasi
+
+            // --- 2. Konfigurasi Komposisi PPh (Doughnut Chart) ---
+            const pieCtx = document.getElementById('publicPieChart').getContext('2d');
+            const pieConfig = {
+                type: 'doughnut',
+                data: {
+                    labels: ['PPh 21', 'PPh 22', 'PPh 23', 'PPh Final'],
+                    datasets: [{
+                        data: data.pieData,
+                        backgroundColor: ['#16478A', '#1976D2', '#FFC107', '#28a745'],
+                        borderWidth: 3,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { padding: 20 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((context.parsed / total) * 100);
+                                    return `${context.label}: ${percentage}% (Rp ${context.parsed} Juta)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            chartInstances.pie = new Chart(pieCtx, pieConfig);
+            chartConfigs.pie = pieConfig; // Simpan konfigurasi
+            
+            // --- 3. Konfigurasi Target vs Realisasi (Bar Chart) ---
+            const targetCtx = document.getElementById('targetChart').getContext('2d');
+            const targetConfig = {
+                type: 'bar',
+                data: {
+                    labels: ['PPh 21', 'PPh 22', 'PPh 23', 'PPh Final'],
+                    datasets: [
+                        {
+                            label: 'Target',
+                            data: data.targetData.target,
+                            backgroundColor: 'rgba(22, 71, 138, 0.6)',
+                            borderColor: '#16478A',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Realisasi',
+                            data: data.targetData.realization,
+                            backgroundColor: 'rgba(255, 193, 7, 0.6)',
+                            borderColor: '#FFC107',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Juta Rupiah'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': Rp ' + context.parsed.y + ' Juta';
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            chartInstances.target = new Chart(targetCtx, targetConfig);
+            chartConfigs.target = targetConfig; // Simpan konfigurasi
+            
+            // --- 4. Konfigurasi Pertumbuhan Vendor (Bar Chart) ---
+            const vendorCtx = document.getElementById('vendorChart').getContext('2d');
+            const vendorConfig = {
+                type: 'bar',
+                data: {
+                    labels: data.months,
+                    datasets: [{
+                        label: 'Vendor Aktif',
+                        data: data.vendorData,
+                        backgroundColor: 'rgba(25, 118, 210, 0.6)',
+                        borderColor: '#1976D2',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: Math.min(...data.vendorData) - 10,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Vendor'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Vendor Aktif: ' + context.parsed.y;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            chartInstances.vendor = new Chart(vendorCtx, vendorConfig);
+            chartConfigs.vendor = vendorConfig; // Simpan konfigurasi
+        }
+
+        function runPublicAI() {
+            const data = chartData[selectedYear];
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const formattedDate = currentDate.toLocaleDateString('id-ID', { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            });
+            
+            // Calculate growth percentage
+            const currentMonthData = data.trendData.current[currentMonth];
+            const prevYearMonthData = chartData[selectedYear - 1].trendData.current[currentMonth];
+            const growthPercent = ((currentMonthData - prevYearMonthData) / prevYearMonthData * 100).toFixed(1);
+            
+            // Random AI messages
+            const messages = [
+                `Per ${formattedDate}, pengelolaan pajak daerah dalam kondisi BAIK: total PPh naik ${growthPercent}% dibanding periode yang sama tahun lalu.`,
+                `Analisis ${formattedDate} menunjukkan performa POSITIF dengan pertumbuhan ${growthPercent}% YoY pada penerimaan pajak daerah.`,
+                `Laporan ${formattedDate}: Tren pengelolaan pajak daerah MENGEMBANG dengan kenaikan ${growthPercent}% dari tahun sebelumnya.`,
+                `Update ${formattedDate}: Efektivitas pemungutan pajak daerah MENINGKAT, tercermin dari pertumbuhan ${growthPercent}% YoY.`,
+                `Status ${formattedDate}: Kinerja pengelolaan pajak daerah STABIL dengan pertumbuhan ${growthPercent}% dibanding tahun lalu.`
+            ];
+            
+            const explanations = [
+                `Analisis berdasarkan tren penerimaan ${currentMonth + 1} bulan terakhir menunjukkan peningkatan konsisten dalam efektivitas pemungutan pajak.`,
+                `Peningkatan ini didorong oleh optimalisasi sistem pemungutan dan perluasan basis data wajib pajak daerah.`,
+                `Pertumbuhan yang stabil ini mengindikasikan efektivitas kebijakan transparansi dalam pengelolaan pajak daerah.`,
+                `Tren positif ini sejalan dengan peningkatan jumlah vendor terdaftar dan kepatuhan wajib pajak.`,
+                `Performa ini mencerminkan keberhasilan implementasi sistem digital dalam pengelolaan pajak daerah.`
+            ];
+            
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            const randomExplanation = explanations[Math.floor(Math.random() * explanations.length)];
+            
+            document.getElementById('aiPublicMessage').textContent = randomMessage;
+            document.getElementById('aiExplanation').textContent = randomExplanation;
+        }
+
+        function showDetailedCharts() {
+            // Memanggil Tren Penerimaan Bulanan sebagai default
+            showChartInModal('publicTrendChart', 'Tren Penerimaan Bulanan ' + selectedYear);
+        }
+
+        function showChartInModal(chartId, title) {
+			const modalElement = document.getElementById('chartModal');
+            const modal = new bootstrap.Modal(modalElement);
+			document.getElementById('chartModalLabel').textContent = title;
+			
+			// Tentukan key untuk mengambil config (misal: 'publicTrendChart' -> 'trend')
+			const configKey = chartId.replace('public', '').replace('Chart', '').toLowerCase();
+			
+			// Dapatkan konfigurasi chart yang asli
+			const originalConfig = chartConfigs[configKey]; 
+
+			if (!originalConfig) {
+				// Tampilkan pesan error jika config tidak ditemukan (pencegahan)
+				console.error('Chart configuration not found for:', configKey);
+				Swal.fire('Error', 'Konfigurasi grafik tidak ditemukan.', 'error');
+				return;
+			}
+
+			// Ambil canvas modal
+			const modalCanvas = document.getElementById('modalChartCanvas');
+			
+			// Hancurkan chart sebelumnya di modal jika ada
+			const existingChart = Chart.getChart(modalCanvas);
+			if (existingChart) {
+				existingChart.destroy();
+			}
+			
+			const modalCtx = modalCanvas.getContext('2d');
+			
+			// Gunakan spread operator untuk menyalin config. Pastikan properti options di-copy juga
+			const modalChartConfig = { 
+                ...originalConfig,
+                options: {
+                    ...originalConfig.options,
+                    // Pastikan maintainAspectRatio false di modal untuk tampilan lebih luas
+                    maintainAspectRatio: false
+                }
+            }; 
+			
+			// Buat chart baru di modal
+			const modalChart = new Chart(modalCtx, modalChartConfig);
+			
+			modal.show();
+			
+			// Tambahkan event listener untuk memastikan rendering yang benar setelah modal terbuka
+			modalElement.addEventListener('shown.bs.modal', function handler() {
+				modalChart.update();
+				// Hapus listener agar tidak dijalankan berkali-kali
+				modalElement.removeEventListener('shown.bs.modal', handler);
+			});
+		}
+
+        function toggleFullScreen(chartId) {
+            showChartInModal(chartId, document.querySelector(`#${chartId}`).closest('.chart-container').querySelector('h5').textContent);
+        }
+
+        
+        function downloadOpenData() {
+            // Definisikan warna dari style Anda (sudah ada di CSS :root)
+            const PRIMARY_COLOR = '#16478A';
+            const SECONDARY_COLOR = '#FFC107';
+
+            const totalYears = 5; 
+            let timerInterval;
+
+            // Tahap 1: Mempersiapkan Data (Simulasi cepat)
+            Swal.fire({
+                title: 'Mempersiapkan Data Terbuka',
+                html: '<i class="fas fa-spinner fa-spin me-2" style="color: ' + PRIMARY_COLOR + ';"></i> Memuat data agregat pajak daerah...',
+                timer: 1500,
+                timerProgressBar: true,
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                customClass: {
+                    // Kustomisasi SweetAlert2 agar sesuai style Anda
+                    popup: 'border-top border-4',
+                    header: 'p-3',
+                    title: 'text-primary',
+                    timerProgressBar: 'bg-primary' 
+                },
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    // Tahap 2: Memproses dan Mengunduh File (Progress Bar Interaktif)
+                    Swal.fire({
+                        title: `<span style="color: ${PRIMARY_COLOR}; font-size: 1.25rem;"><i class="fas fa-file-excel me-2"></i> Memproses File Excel</span>`,
+                        html: `
+                            <div style="margin-top: 15px; text-align: left;">
+                                <div id="progress-status" style="font-weight: 500; color: ${PRIMARY_COLOR}; margin-bottom: 5px; font-size: 0.95rem;">
+                                    Memulai pembuatan data...
+                                </div>
+                                <progress id="progress-bar" value="0" max="100" 
+                                    style="width: 100%; height: 20px; border: 1px solid ${PRIMARY_COLOR}; border-radius: 5px;">
+                                </progress>
+                                <div id="progress-percentage" style="text-align: center; font-weight: 600; color: ${PRIMARY_COLOR}; margin-top: 5px;">0%</div>
+                            </div>
+                            <style>
+                                /* Menjamin kustomisasi progress bar di SweetAlert2 */
+                                #progress-bar::-webkit-progress-bar { background-color: #eee; border-radius: 5px; }
+                                #progress-bar::-webkit-progress-value { background-color: ${SECONDARY_COLOR}; border-radius: 5px; transition: width 0.4s ease; }
+                                #progress-bar::-moz-progress-bar { background-color: ${SECONDARY_COLOR}; border-radius: 5px; }
+                            </style>
+                        `,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        customClass: {
+                            popup: 'border-top border-4 border-warning', // Menggunakan border kuning
+                            header: 'p-3',
+                        },
+                        willOpen: () => {
+                            const progressBar = document.getElementById('progress-bar');
+                            const progressStatus = document.getElementById('progress-status');
+                            const progressPercentage = document.getElementById('progress-percentage');
+                            
+                            let progress = 0;
+                            let currentStep = 0;
+
+                            timerInterval = setInterval(() => {
+                                if (currentStep < totalYears) {
+                                    // Update status per tahun
+                                    const yearToProcess = currentYear - (totalYears - 1 - currentStep);
+                                    progressStatus.innerHTML = `<i class="fas fa-chart-area me-1"></i> Menyusun data historis Tahun **${yearToProcess}**...`;
+                                    
+                                    // Tingkatkan progress
+                                    progress += (100 / totalYears);
+                                    progressBar.value = progress;
+                                    progressPercentage.textContent = `${Math.min(99, Math.floor(progress))}%`; // Maks 99% sebelum selesai
+                                    currentStep++;
+                                } else {
+                                    clearInterval(timerInterval);
+                                    progressBar.value = 100;
+                                    progressStatus.innerHTML = '<i class="fas fa-check-circle me-1" style="color: #28a745;"></i> **Proses selesai.** Memulai pengunduhan...';
+                                    progressPercentage.textContent = '100%';
+
+                                    // Lakukan proses pengunduhan sebenarnya
+                                    const excelData = generateExcelData();
+                                    downloadExcelFile(excelData, `arthapala-data-terbuka-${selectedYear}.xlsx`);
+                                    
+                                    // Tampilkan pop-up Selesai
+                                    setTimeout(() => {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Unduh Berhasil! 🎉',
+                                            text: `File data terbuka telah berhasil diunduh ke perangkat Anda.`,
+                                            confirmButtonColor: PRIMARY_COLOR,
+                                            customClass: {
+                                                confirmButton: 'btn-primary'
+                                            }
+                                        });
+                                    }, 800);
+                                }
+                            }, 400); // Kecepatan simulasi per langkah
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval);
+                        }
+                    });
+                }
+            });
+        }
+		
+        function generateExcelData() {
+            // Create workbook
+            const wb = XLSX.utils.book_new();
+            
+            // Generate data for the last 5 years
+            for (let year = currentYear - 4; year <= currentYear; year++) {
+                const data = chartData[year];
+                const sheetData = [];
+                
+                // Add header
+                sheetData.push(['Tahun', 'Bulan', 'Jenis_PPh', 'Total_Penerimaan_Juta', 'Jumlah_Transaksi', 'Vendor_Aktif']);
+                
+                // Add data for each month and PPh type
+                data.months.forEach((month, monthIndex) => {
+                    const pphTypes = ['PPh21', 'PPh22', 'PPh23', 'PPh Final'];
+                    pphTypes.forEach((pphType, pphIndex) => {
+                        // Generate realistic data based on the chart data
+                        const penerimaan = Math.round(data.pieData[pphIndex] * (data.trendData.current[monthIndex] / 100));
+                        const transaksi = Math.round(50 + Math.random() * 100);
+                        const vendor = data.vendorData[monthIndex];
+                        
+                        sheetData.push([
+                            year,
+                            month,
+                            pphType,
+                            penerimaan,
+                            transaksi,
+                            vendor
+                        ]);
+                    });
+                });
+                
+                // Create worksheet
+                const ws = XLSX.utils.aoa_to_sheet(sheetData);
+                
+                // Add worksheet to workbook
+                XLSX.utils.book_append_sheet(wb, ws, `Data ${year}`);
+            }
+            
+            return wb;
+        }
+
+        function downloadExcelFile(wb, filename) {
+            XLSX.writeFile(wb, filename);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referensi Data - Arthapala</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #16478A;
+            --primary-yellow: #FFC107;
+            --light-blue: #1976D2;
+            --background: #F7FAFF;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background);
+        }
+        
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: var(--primary-blue);
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        
+        .sidebar-brand h4 {
+            color: var(--primary-yellow);
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--primary-yellow);
+        }
+        
+        .sidebar-menu i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+        
+        .top-header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .content-area {
+            padding: 2rem;
+        }
+        
+        .reference-tabs {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .nav-tabs {
+            border-bottom: none;
+            background: var(--primary-blue);
+        }
+        
+        .nav-tabs .nav-link {
+            border: none;
+            color: rgba(255,255,255,0.8);
+            font-weight: 500;
+            padding: 1rem 1.5rem;
+            border-radius: 0;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            color: white;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--primary-blue);
+            background: var(--primary-yellow);
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            padding: 2rem;
+        }
+        
+        .data-table-container {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-add {
+            background: var(--primary-yellow);
+            border: none;
+            color: var(--primary-blue);
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-add:hover {
+            background: #e0a800;
+            color: var(--primary-blue);
+            transform: translateY(-1px);
+        }
+        
+        .search-box {
+            position: relative;
+            max-width: 300px;
+        }
+        
+        .search-box input {
+            padding-right: 40px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        .table th {
+            background: #f8f9fa;
+            border: none;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        
+        .table td {
+            vertical-align: middle;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .btn-action {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            border-radius: 4px;
+            margin: 0 2px;
+        }
+        
+        .modal-header {
+            background: var(--primary-blue);
+            color: white;
+        }
+        
+        .modal-header .btn-close {
+            filter: invert(1);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 0.2rem rgba(22, 71, 138, 0.25);
+        }
+        
+        .badge {
+            font-size: 0.75rem;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-left: -280px;
+            }
+            
+            .sidebar.show {
+                margin-left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .table-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .search-box {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <h4><i class="fas fa-coins me-2"></i>Arthapala</h4>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="dashboard-asn.html">
+                <i class="fas fa-tachometer-alt"></i>Dashboard
+            </a>
+            <a href="transaksi.html">
+                <i class="fas fa-plus-circle"></i>Input Transaksi
+            </a>
+            <a href="referensi.html" class="active">
+                <i class="fas fa-database"></i>Referensi
+            </a>
+            <a href="laporan.html">
+                <i class="fas fa-file-export"></i>Laporan & Ekspor
+            </a>
+            <a href="kalkulator.html">
+                <i class="fas fa-calculator"></i>Kalkulator
+            </a>
+            <a href="settings.html">
+                <i class="fas fa-cog"></i>Pengaturan
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Header -->
+        <div class="top-header">
+            <button class="btn btn-link d-md-none" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h5 class="mb-0">Referensi Data Master</h5>
+            <div class="user-info">
+                <span>ASN User</span>
+                <div class="user-avatar">AU</div>
+                <button class="btn btn-sm btn-outline-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <div class="reference-tabs">
+                <ul class="nav nav-tabs" id="referenceTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="objek-pajak-tab" data-bs-toggle="tab" data-bs-target="#objek-pajak" type="button">
+                            <i class="fas fa-tags me-2"></i>Kode Objek Pajak
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="penyedia-tab" data-bs-toggle="tab" data-bs-target="#penyedia" type="button">
+                            <i class="fas fa-building me-2"></i>Penyedia/Vendor
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="dokumen-tab" data-bs-toggle="tab" data-bs-target="#dokumen" type="button">
+                            <i class="fas fa-file me-2"></i>Jenis Dokumen
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="ptkp-tab" data-bs-toggle="tab" data-bs-target="#ptkp" type="button">
+                            <i class="fas fa-users me-2"></i>Status PTKP
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="referenceTabsContent">
+                    <!-- Kode Objek Pajak -->
+                    <div class="tab-pane fade show active" id="objek-pajak" role="tabpanel">
+                        <div class="table-header">
+                            <h6 class="mb-0">Manajemen Kode Objek Pajak</h6>
+                            <div class="d-flex gap-2">
+                                <div class="search-box">
+                                    <input type="text" class="form-control" id="searchObjekPajak" placeholder="Cari kode objek...">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <button class="btn btn-add" onclick="addObjekPajak()">
+                                    <i class="fas fa-plus me-2"></i>Tambah Baru
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Kode</th>
+                                        <th>Deskripsi</th>
+                                        <th>Jenis PPh</th>
+                                        <th>Tarif Default (%)</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="objekPajakTable">
+                                    <!-- Data akan dimuat dari JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Penyedia/Vendor -->
+                    <div class="tab-pane fade" id="penyedia" role="tabpanel">
+                        <div class="table-header">
+                            <h6 class="mb-0">Manajemen Penyedia/Vendor</h6>
+                            <div class="d-flex gap-2">
+                                <div class="search-box">
+                                    <input type="text" class="form-control" id="searchPenyedia" placeholder="Cari vendor...">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <button class="btn btn-add" onclick="addPenyedia()">
+                                    <i class="fas fa-plus me-2"></i>Tambah Baru
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nama</th>
+                                        <th>NPWP</th>
+                                        <th>Bidang Usaha</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="penyediaTable">
+                                    <!-- Data akan dimuat dari JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Jenis Dokumen -->
+                    <div class="tab-pane fade" id="dokumen" role="tabpanel">
+                        <div class="table-header">
+                            <h6 class="mb-0">Manajemen Jenis Dokumen</h6>
+                            <div class="d-flex gap-2">
+                                <div class="search-box">
+                                    <input type="text" class="form-control" id="searchDokumen" placeholder="Cari dokumen...">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <button class="btn btn-add" onclick="addDokumen()">
+                                    <i class="fas fa-plus me-2"></i>Tambah Baru
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Kode</th>
+                                        <th>Deskripsi</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dokumenTable">
+                                    <!-- Data akan dimuat dari JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Status PTKP -->
+                    <div class="tab-pane fade" id="ptkp" role="tabpanel">
+                        <div class="table-header">
+                            <h6 class="mb-0">Manajemen Status PTKP</h6>
+                            <div class="d-flex gap-2">
+                                <div class="search-box">
+                                    <input type="text" class="form-control" id="searchPtkp" placeholder="Cari status PTKP...">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <button class="btn btn-add" onclick="addPtkp()">
+                                    <i class="fas fa-plus me-2"></i>Tambah Baru
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Kode</th>
+                                        <th>Deskripsi</th>
+                                        <th>Nilai PTKP</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ptkpTable">
+                                    <!-- Data akan dimuat dari JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk Add/Edit Kode Objek Pajak -->
+    <div class="modal fade" id="objekPajakModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-tags me-2"></i>
+                        <span id="objekPajakModalTitle">Tambah Kode Objek Pajak</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="objekPajakForm">
+                        <input type="hidden" id="objekPajakId">
+                        <div class="mb-3">
+                            <label class="form-label">Kode <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="objekPajakKode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Deskripsi <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="objekPajakDeskripsi" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Jenis PPh <span class="text-danger">*</span></label>
+                            <select class="form-select" id="objekPajakJenis" required>
+                                <option value="">Pilih Jenis</option>
+                                <option value="PPh21">PPh 21</option>
+                                <option value="PPh22">PPh 22</option>
+                                <option value="PPh23">PPh 23</option>
+                                <option value="PPh Final">PPh Final</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tarif Default (%)</label>
+                            <input type="number" class="form-control" id="objekPajakTarif" step="0.01">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="saveObjekPajak()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk Add/Edit Penyedia -->
+    <div class="modal fade" id="penyediaModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-building me-2"></i>
+                        <span id="penyediaModalTitle">Tambah Penyedia</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="penyediaForm">
+                        <input type="hidden" id="penyediaId">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Nama <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="penyediaNama" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">NPWP <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="penyediaNpwp" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Alamat</label>
+                            <textarea class="form-control" id="penyediaAlamat" rows="3"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Bidang Usaha</label>
+                                    <input type="text" class="form-control" id="penyediaBidang">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Status</label>
+                                    <select class="form-select" id="penyediaStatus">
+                                        <option value="Aktif">Aktif</option>
+                                        <option value="Non-Aktif">Non-Aktif</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="savePenyedia()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk Add/Edit Dokumen -->
+    <div class="modal fade" id="dokumenModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-file me-2"></i>
+                        <span id="dokumenModalTitle">Tambah Jenis Dokumen</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="dokumenForm">
+                        <input type="hidden" id="dokumenId">
+                        <div class="mb-3">
+                            <label class="form-label">Kode <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="dokumenKode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Deskripsi <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="dokumenDeskripsi" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="dokumenStatus">
+                                <option value="Aktif">Aktif</option>
+                                <option value="Non-Aktif">Non-Aktif</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="saveDokumen()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk Add/Edit PTKP -->
+    <div class="modal fade" id="ptkpModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-users me-2"></i>
+                        <span id="ptkpModalTitle">Tambah Status PTKP</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="ptkpForm">
+                        <input type="hidden" id="ptkpId">
+                        <div class="mb-3">
+                            <label class="form-label">Kode <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="ptkpKode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Deskripsi <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="ptkpDeskripsi" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nilai PTKP</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Rp</span>
+                                <input type="number" class="form-control" id="ptkpNilai">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="savePtkp()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.js"></script>
+    
+    <script>
+        // Check authentication
+        window.onload = function() {
+            const session = localStorage.getItem('arthapala_session');
+            if (!session) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            loadAllData();
+            setupSearchHandlers();
+        };
+
+        // Sample master data
+        let masterData = {
+            objekPajak: [
+                {id: 1, kode: "21-100-01", deskripsi: "Gaji PNS", jenis: "PPh21", tarif: 5},
+                {id: 2, kode: "21-100-02", deskripsi: "Honorarium", jenis: "PPh21", tarif: 5},
+                {id: 3, kode: "22-100-01", deskripsi: "Impor Barang", jenis: "PPh22", tarif: 1.5},
+                {id: 4, kode: "23-100-01", deskripsi: "Jasa Konsultasi", jenis: "PPh23", tarif: 2},
+                {id: 5, kode: "25-100-01", deskripsi: "Final UMKM", jenis: "PPh Final", tarif: 0.5}
+            ],
+            penyedia: [
+                {id: 1, nama: "PT Maju Bersama", npwp: "01.234.567.8-901.000", alamat: "Jl. Merdeka No. 123", bidang: "Konstruksi", status: "Aktif"},
+                {id: 2, nama: "CV Teknologi Digital", npwp: "02.345.678.9-012.000", alamat: "Jl. Sudirman No. 456", bidang: "IT Konsultan", status: "Aktif"},
+                {id: 3, nama: "UD Sejahtera", npwp: "03.456.789.0-123.000", alamat: "Jl. Ahmad Yani No. 789", bidang: "Perdagangan", status: "Aktif"}
+            ],
+            dokumen: [
+                {id: 1, kode: "INV", deskripsi: "Invoice", status: "Aktif"},
+                {id: 2, kode: "KWT", deskripsi: "Kuitansi", status: "Aktif"},
+                {id: 3, kode: "KTR", deskripsi: "Kontrak", status: "Aktif"},
+                {id: 4, kode: "SPK", deskripsi: "Surat Perintah Kerja", status: "Aktif"}
+            ],
+            ptkp: [
+                {id: 1, kode: "TK/0", deskripsi: "Tidak Kawin", nilai: 54000000},
+                {id: 2, kode: "TK/1", deskripsi: "Tidak Kawin, 1 Tanggungan", nilai: 58500000},
+                {id: 3, kode: "K/0", deskripsi: "Kawin", nilai: 58500000},
+                {id: 4, kode: "K/1", deskripsi: "Kawin, 1 Tanggungan", nilai: 63000000}
+            ]
+        };
+
+        function loadAllData() {
+            // Load from localStorage if exists
+            const saved = localStorage.getItem('arthapala_master_data');
+            if (saved) {
+                masterData = JSON.parse(saved);
+            }
+            
+            loadObjekPajakData();
+            loadPenyediaData();
+            loadDokumenData();
+            loadPtkpData();
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('arthapala_master_data', JSON.stringify(masterData));
+        }
+
+        function loadObjekPajakData() {
+            const tbody = document.getElementById('objekPajakTable');
+            tbody.innerHTML = '';
+            
+            masterData.objekPajak.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><code>${item.kode}</code></td>
+                    <td>${item.deskripsi}</td>
+                    <td><span class="badge bg-primary">${item.jenis}</span></td>
+                    <td>${item.tarif}%</td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-action" onclick="editObjekPajak(${item.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-outline-danger btn-action" onclick="deleteObjekPajak(${item.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadPenyediaData() {
+            const tbody = document.getElementById('penyediaTable');
+            tbody.innerHTML = '';
+            
+            masterData.penyedia.forEach(item => {
+                const row = document.createElement('tr');
+                const statusBadge = item.status === 'Aktif' ? 'bg-success' : 'bg-secondary';
+                row.innerHTML = `
+                    <td>PYD-${item.id.toString().padStart(3, '0')}</td>
+                    <td>${item.nama}</td>
+                    <td><code>${item.npwp}</code></td>
+                    <td>${item.bidang}</td>
+                    <td><span class="badge ${statusBadge}">${item.status}</span></td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-action" onclick="editPenyedia(${item.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-outline-danger btn-action" onclick="deletePenyedia(${item.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadDokumenData() {
+            const tbody = document.getElementById('dokumenTable');
+            tbody.innerHTML = '';
+            
+            masterData.dokumen.forEach(item => {
+                const row = document.createElement('tr');
+                const statusBadge = item.status === 'Aktif' ? 'bg-success' : 'bg-secondary';
+                row.innerHTML = `
+                    <td><code>${item.kode}</code></td>
+                    <td>${item.deskripsi}</td>
+                    <td><span class="badge ${statusBadge}">${item.status}</span></td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-action" onclick="editDokumen(${item.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-outline-danger btn-action" onclick="deleteDokumen(${item.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadPtkpData() {
+            const tbody = document.getElementById('ptkpTable');
+            tbody.innerHTML = '';
+            
+            masterData.ptkp.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><code>${item.kode}</code></td>
+                    <td>${item.deskripsi}</td>
+                    <td>Rp ${item.nilai.toLocaleString('id-ID')}</td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-action" onclick="editPtkp(${item.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-outline-danger btn-action" onclick="deletePtkp(${item.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // OBJEK PAJAK FUNCTIONS
+        function addObjekPajak() {
+            document.getElementById('objekPajakModalTitle').textContent = 'Tambah Kode Objek Pajak';
+            document.getElementById('objekPajakForm').reset();
+            document.getElementById('objekPajakId').value = '';
+            new bootstrap.Modal(document.getElementById('objekPajakModal')).show();
+        }
+
+        function editObjekPajak(id) {
+            const item = masterData.objekPajak.find(x => x.id === id);
+            if (item) {
+                document.getElementById('objekPajakModalTitle').textContent = 'Edit Kode Objek Pajak';
+                document.getElementById('objekPajakId').value = item.id;
+                document.getElementById('objekPajakKode').value = item.kode;
+                document.getElementById('objekPajakDeskripsi').value = item.deskripsi;
+                document.getElementById('objekPajakJenis').value = item.jenis;
+                document.getElementById('objekPajakTarif').value = item.tarif;
+                new bootstrap.Modal(document.getElementById('objekPajakModal')).show();
+            }
+        }
+
+        function saveObjekPajak() {
+            const id = document.getElementById('objekPajakId').value;
+            const kode = document.getElementById('objekPajakKode').value.trim();
+            const deskripsi = document.getElementById('objekPajakDeskripsi').value.trim();
+            const jenis = document.getElementById('objekPajakJenis').value;
+            const tarif = parseFloat(document.getElementById('objekPajakTarif').value) || 0;
+
+            if (!kode || !deskripsi || !jenis) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Data Tidak Lengkap',
+                    text: 'Mohon isi semua field yang wajib diisi',
+                    confirmButtonColor: '#16478A'
+                });
+                return;
+            }
+
+            if (id) {
+                // Edit existing
+                const item = masterData.objekPajak.find(x => x.id == id);
+                item.kode = kode;
+                item.deskripsi = deskripsi;
+                item.jenis = jenis;
+                item.tarif = tarif;
+            } else {
+                // Add new
+                const newId = Math.max(...masterData.objekPajak.map(x => x.id)) + 1;
+                masterData.objekPajak.push({
+                    id: newId,
+                    kode: kode,
+                    deskripsi: deskripsi,
+                    jenis: jenis,
+                    tarif: tarif
+                });
+            }
+
+            saveToLocalStorage();
+            loadObjekPajakData();
+            bootstrap.Modal.getInstance(document.getElementById('objekPajakModal')).hide();
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Data objek pajak berhasil disimpan',
+                confirmButtonColor: '#16478A'
+            });
+        }
+
+        function deleteObjekPajak(id) {
+            Swal.fire({
+                title: 'Hapus Data?',
+                text: 'Data yang dihapus tidak dapat dikembalikan',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    masterData.objekPajak = masterData.objekPajak.filter(x => x.id !== id);
+                    saveToLocalStorage();
+                    loadObjekPajakData();
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Terhapus',
+                        text: 'Data berhasil dihapus',
+                        confirmButtonColor: '#16478A'
+                    });
+                }
+            });
+        }
+
+        // PENYEDIA FUNCTIONS
+        function addPenyedia() {
+            document.getElementById('penyediaModalTitle').textContent = 'Tambah Penyedia';
+            document.getElementById('penyediaForm').reset();
+            document.getElementById('penyediaId').value = '';
+            document.getElementById('penyediaStatus').value = 'Aktif';
+            new bootstrap.Modal(document.getElementById('penyediaModal')).show();
+        }
+
+        function editPenyedia(id) {
+            const item = masterData.penyedia.find(x => x.id === id);
+            if (item) {
+                document.getElementById('penyediaModalTitle').textContent = 'Edit Penyedia';
+                document.getElementById('penyediaId').value = item.id;
+                document.getElementById('penyediaNama').value = item.nama;
+                document.getElementById('penyediaNpwp').value = item.npwp;
+                document.getElementById('penyediaAlamat').value = item.alamat;
+                document.getElementById('penyediaBidang').value = item.bidang;
+                document.getElementById('penyediaStatus').value = item.status;
+                new bootstrap.Modal(document.getElementById('penyediaModal')).show();
+            }
+        }
+
+        function savePenyedia() {
+            const id = document.getElementById('penyediaId').value;
+            const nama = document.getElementById('penyediaNama').value.trim();
+            const npwp = document.getElementById('penyediaNpwp').value.trim();
+            const alamat = document.getElementById('penyediaAlamat').value.trim();
+            const bidang = document.getElementById('penyediaBidang').value.trim();
+            const status = document.getElementById('penyediaStatus').value;
+
+            if (!nama || !npwp) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Data Tidak Lengkap',
+                    text: 'Nama dan NPWP wajib diisi',
+                    confirmButtonColor: '#16478A'
+                });
+                return;
+            }
+
+            if (id) {
+                // Edit existing
+                const item = masterData.penyedia.find(x => x.id == id);
+                item.nama = nama;
+                item.npwp = npwp;
+                item.alamat = alamat;
+                item.bidang = bidang;
+                item.status = status;
+            } else {
+                // Add new
+                const newId = Math.max(...masterData.penyedia.map(x => x.id)) + 1;
+                masterData.penyedia.push({
+                    id: newId,
+                    nama: nama,
+                    npwp: npwp,
+                    alamat: alamat,
+                    bidang: bidang,
+                    status: status
+                });
+            }
+
+            saveToLocalStorage();
+            loadPenyediaData();
+            bootstrap.Modal.getInstance(document.getElementById('penyediaModal')).hide();
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Data penyedia berhasil disimpan',
+                confirmButtonColor: '#16478A'
+            });
+        }
+
+        function deletePenyedia(id) {
+            Swal.fire({
+                title: 'Hapus Data?',
+                text: 'Data yang dihapus tidak dapat dikembalikan',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    masterData.penyedia = masterData.penyedia.filter(x => x.id !== id);
+                    saveToLocalStorage();
+                    loadPenyediaData();
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Terhapus',
+                        text: 'Data berhasil dihapus',
+                        confirmButtonColor: '#16478A'
+                    });
+                }
+            });
+        }
+
+        // DOKUMEN FUNCTIONS
+        function addDokumen() {
+            document.getElementById('dokumenModalTitle').textContent = 'Tambah Jenis Dokumen';
+            document.getElementById('dokumenForm').reset();
+            document.getElementById('dokumenId').value = '';
+            document.getElementById('dokumenStatus').value = 'Aktif';
+            new bootstrap.Modal(document.getElementById('dokumenModal')).show();
+        }
+
+        function editDokumen(id) {
+            const item = masterData.dokumen.find(x => x.id === id);
+            if (item) {
+                document.getElementById('dokumenModalTitle').textContent = 'Edit Jenis Dokumen';
+                document.getElementById('dokumenId').value = item.id;
+                document.getElementById('dokumenKode').value = item.kode;
+                document.getElementById('dokumenDeskripsi').value = item.deskripsi;
+                document.getElementById('dokumenStatus').value = item.status;
+                new bootstrap.Modal(document.getElementById('dokumenModal')).show();
+            }
+        }
+
+        function saveDokumen() {
+            const id = document.getElementById('dokumenId').value;
+            const kode = document.getElementById('dokumenKode').value.trim();
+            const deskripsi = document.getElementById('dokumenDeskripsi').value.trim();
+            const status = document.getElementById('dokumenStatus').value;
+
+            if (!kode || !deskripsi) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Data Tidak Lengkap',
+                    text: 'Kode dan deskripsi wajib diisi',
+                    confirmButtonColor: '#16478A'
+                });
+                return;
+            }
+
+            if (id) {
+                // Edit existing
+                const item = masterData.dokumen.find(x => x.id == id);
+                item.kode = kode;
+                item.deskripsi = deskripsi;
+                item.status = status;
+            } else {
+                // Add new
+                const newId = Math.max(...masterData.dokumen.map(x => x.id)) + 1;
+                masterData.dokumen.push({
+                    id: newId,
+                    kode: kode,
+                    deskripsi: deskripsi,
+                    status: status
+                });
+            }
+
+            saveToLocalStorage();
+            loadDokumenData();
+            bootstrap.Modal.getInstance(document.getElementById('dokumenModal')).hide();
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Data dokumen berhasil disimpan',
+                confirmButtonColor: '#16478A'
+            });
+        }
+
+        function deleteDokumen(id) {
+            Swal.fire({
+                title: 'Hapus Data?',
+                text: 'Data yang dihapus tidak dapat dikembalikan',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    masterData.dokumen = masterData.dokumen.filter(x => x.id !== id);
+                    saveToLocalStorage();
+                    loadDokumenData();
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Terhapus',
+                        text: 'Data berhasil dihapus',
+                        confirmButtonColor: '#16478A'
+                    });
+                }
+            });
+        }
+
+        // PTKP FUNCTIONS
+        function addPtkp() {
+            document.getElementById('ptkpModalTitle').textContent = 'Tambah Status PTKP';
+            document.getElementById('ptkpForm').reset();
+            document.getElementById('ptkpId').value = '';
+            new bootstrap.Modal(document.getElementById('ptkpModal')).show();
+        }
+
+        function editPtkp(id) {
+            const item = masterData.ptkp.find(x => x.id === id);
+            if (item) {
+                document.getElementById('ptkpModalTitle').textContent = 'Edit Status PTKP';
+                document.getElementById('ptkpId').value = item.id;
+                document.getElementById('ptkpKode').value = item.kode;
+                document.getElementById('ptkpDeskripsi').value = item.deskripsi;
+                document.getElementById('ptkpNilai').value = item.nilai;
+                new bootstrap.Modal(document.getElementById('ptkpModal')).show();
+            }
+        }
+
+        function savePtkp() {
+            const id = document.getElementById('ptkpId').value;
+            const kode = document.getElementById('ptkpKode').value.trim();
+            const deskripsi = document.getElementById('ptkpDeskripsi').value.trim();
+            const nilai = parseFloat(document.getElementById('ptkpNilai').value) || 0;
+
+            if (!kode || !deskripsi) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Data Tidak Lengkap',
+                    text: 'Kode dan deskripsi wajib diisi',
+                    confirmButtonColor: '#16478A'
+                });
+                return;
+            }
+
+            if (id) {
+                // Edit existing
+                const item = masterData.ptkp.find(x => x.id == id);
+                item.kode = kode;
+                item.deskripsi = deskripsi;
+                item.nilai = nilai;
+            } else {
+                // Add new
+                const newId = Math.max(...masterData.ptkp.map(x => x.id)) + 1;
+                masterData.ptkp.push({
+                    id: newId,
+                    kode: kode,
+                    deskripsi: deskripsi,
+                    nilai: nilai
+                });
+            }
+
+            saveToLocalStorage();
+            loadPtkpData();
+            bootstrap.Modal.getInstance(document.getElementById('ptkpModal')).hide();
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Data PTKP berhasil disimpan',
+                confirmButtonColor: '#16478A'
+            });
+        }
+
+        function deletePtkp(id) {
+            Swal.fire({
+                title: 'Hapus Data?',
+                text: 'Data yang dihapus tidak dapat dikembalikan',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    masterData.ptkp = masterData.ptkp.filter(x => x.id !== id);
+                    saveToLocalStorage();
+                    loadPtkpData();
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Terhapus',
+                        text: 'Data berhasil dihapus',
+                        confirmButtonColor: '#16478A'
+                    });
+                }
+            });
+        }
+
+        // SEARCH FUNCTIONS
+        function setupSearchHandlers() {
+            // Search handlers for each table would go here
+            // For simplicity in this prototype, we'll just add placeholder functionality
+            document.getElementById('searchObjekPajak').addEventListener('input', function() {
+                // Simple search implementation could be added here
+            });
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        function logout() {
+            Swal.fire({
+                title: 'Logout',
+                text: 'Apakah Anda yakin ingin keluar?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#16478A',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('arthapala_session');
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.css">
+</body>
+</html>

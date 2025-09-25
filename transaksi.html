@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Transaksi - Arthapala</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #16478A;
+            --primary-yellow: #FFC107;
+            --light-blue: #1976D2;
+            --background: #F7FAFF;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background);
+        }
+        
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: var(--primary-blue);
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        
+        .sidebar-brand h4 {
+            color: var(--primary-yellow);
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--primary-yellow);
+        }
+        
+        .sidebar-menu i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+        
+        .top-header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .content-area {
+            padding: 2rem;
+        }
+        
+        .wizard-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .wizard-header {
+            background: var(--primary-blue);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .wizard-progress {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+            position: relative;
+        }
+        
+        .progress-step {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 1rem;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .progress-step.active {
+            background: var(--primary-yellow);
+            color: var(--primary-blue);
+        }
+        
+        .progress-step.completed {
+            background: #28a745;
+            color: white;
+        }
+        
+        .progress-step::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 60px;
+            width: 60px;
+            height: 2px;
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-50%);
+        }
+        
+        .progress-step:last-child::after {
+            display: none;
+        }
+        
+        .progress-step.completed::after {
+            background: #28a745;
+        }
+        
+        .wizard-content {
+            padding: 2rem;
+        }
+        
+        .step-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .step-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .step-title {
+            color: var(--primary-blue);
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .subject-selector {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .subject-option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 200px;
+        }
+        
+        .subject-option:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+        
+        .subject-option.selected {
+            border-color: var(--primary-blue);
+            background: rgba(22, 71, 138, 0.1);
+        }
+        
+        .subject-option i {
+            font-size: 3rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+        
+        .transaction-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .type-option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .type-option:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+        
+        .type-option.selected {
+            border-color: var(--primary-blue);
+            background: rgba(22, 71, 138, 0.1);
+        }
+        
+        .type-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #f8f9fa;
+        }
+        
+        .calculation-result {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-left: 4px solid var(--primary-yellow);
+        }
+        
+        .calculation-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .calculation-row:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+        }
+        
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .btn-wizard {
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary-custom {
+            background: var(--primary-blue);
+            border: none;
+            color: white;
+        }
+        
+        .btn-primary-custom:hover {
+            background: #0d3a73;
+            transform: translateY(-1px);
+        }
+        
+        .btn-yellow {
+            background: var(--primary-yellow);
+            border: none;
+            color: var(--primary-blue);
+        }
+        
+        .btn-yellow:hover {
+            background: #e0a800;
+            color: var(--primary-blue);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 0.2rem rgba(22, 71, 138, 0.25);
+        }
+        
+        .is-invalid {
+            border-color: #dc3545;
+        }
+        
+        .invalid-feedback {
+            display: block;
+        }
+
+        /* BYPASS LOGIN NOTICE */
+        .bypass-notice {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-left: -280px;
+            }
+            
+            .sidebar.show {
+                margin-left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .subject-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .progress-step {
+                margin: 0 0.5rem;
+            }
+            
+            .progress-step::after {
+                width: 30px;
+                left: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <h4><i class="fas fa-coins me-2"></i>Arthapala</h4>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="dashboard-asn.html">
+                <i class="fas fa-tachometer-alt"></i>Dashboard
+            </a>
+            <a href="transaksi.html" class="active">
+                <i class="fas fa-plus-circle"></i>Input Transaksi
+            </a>
+            <a href="referensi.html">
+                <i class="fas fa-database"></i>Referensi
+            </a>
+            <a href="laporan.html">
+                <i class="fas fa-file-export"></i>Laporan & Ekspor
+            </a>
+            <a href="kalkulator.html">
+                <i class="fas fa-calculator"></i>Kalkulator
+            </a>
+            <a href="settings.html">
+                <i class="fas fa-cog"></i>Pengaturan
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Header -->
+        <div class="top-header">
+            <button class="btn btn-link d-md-none" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h5 class="mb-0">Input Transaksi</h5>
+            <div class="user-info">
+                <span>ASN User</span>
+                <div class="user-avatar">AU</div>
+                <button class="btn btn-sm btn-outline-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Bypass Login Notice -->
+            <div class="bypass-notice">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Mode Pengembangan:</strong> Web Apps ini sedang dalam mode pengembangan dan perlu selalu update peraturan perpajakan. 
+            </div>
+            
+            <div class="wizard-container">
+                <!-- Wizard Header -->
+                <div class="wizard-header">
+                    <h4><i class="fas fa-plus-circle me-2"></i>Form Input Transaksi Pajak</h4>
+                    <div class="wizard-progress">
+                        <div class="progress-step active" data-step="1">1</div>
+                        <div class="progress-step" data-step="2">2</div>
+                        <div class="progress-step" data-step="3">3</div>
+                        <div class="progress-step" data-step="4">4</div>
+                        <div class="progress-step" data-step="5">5</div>
+                    </div>
+                </div>
+
+                <!-- Wizard Content -->
+                <div class="wizard-content">
+                    <!-- Step 1: Subject Selection -->
+                    <div class="step-content active" id="step1">
+                        <div class="step-title">Langkah 1: Pilih Subjek Pajak</div>
+                        <div class="subject-selector">
+                            <div class="subject-option" onclick="selectSubject('pribadi')">
+                                <i class="fas fa-user"></i>
+                                <h5>Pribadi</h5>
+                                <p class="text-muted">Wajib Pajak Orang Pribadi</p>
+                            </div>
+                            <div class="subject-option" onclick="selectSubject('perusahaan')">
+                                <i class="fas fa-building"></i>
+                                <h5>Perusahaan</h5>
+                                <p class="text-muted">Badan Usaha / Korporasi</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Transaction Type Selection -->
+                    <div class="step-content" id="step2">
+                        <div class="step-title">Langkah 2: Pilih Jenis Transaksi</div>
+                        <div class="transaction-types" id="transactionTypes">
+                            <!-- Content will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Form Input -->
+                    <div class="step-content" id="step3">
+                        <div class="step-title">Langkah 3: Isi Data Transaksi</div>
+                        <form id="transactionForm">
+                            <div class="row">
+                                <!-- Common Fields -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Masa Pajak <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="masaPajak" required>
+                                            <option value="">Pilih Bulan</option>
+                                            <option value="01">Januari</option>
+                                            <option value="02">Februari</option>
+                                            <option value="03">Maret</option>
+                                            <option value="04">April</option>
+                                            <option value="05">Mei</option>
+                                            <option value="06">Juni</option>
+                                            <option value="07">Juli</option>
+                                            <option value="08">Agustus</option>
+                                            <option value="09" selected>September</option>
+                                            <option value="10">Oktober</option>
+                                            <option value="11">November</option>
+                                            <option value="12">Desember</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tahun Pajak <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="tahunPajak" value="2025" min="2020" max="2030" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Subject-specific Fields -->
+                            <div id="subjectFields">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">ID TKU Penerima <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="idTkuPenerima" placeholder="TKU-001" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Kode Objek Pajak <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="kodeObjekPajak" required>
+                                            <option value="">Pilih Kode Objek</option>
+                                            <option value="21-100-01">21-100-01 - Gaji PNS</option>
+                                            <option value="22-100-01">22-100-01 - Impor Barang</option>
+                                            <option value="23-100-01">23-100-01 - Jasa Konsultasi</option>
+                                            <option value="25-100-01">25-100-01 - Final UMKM</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Penghasilan Bruto <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp</span>
+                                            <input type="number" class="form-control" id="penghasilan" placeholder="0" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Deemed (%) <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="deemed" step="0.01" max="100" placeholder="0" required>
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tarif (%) <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="tarif" step="0.01" max="100" placeholder="0" required>
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Jenis Dokumen Referensi</label>
+                                        <select class="form-select" id="jenisDokRef">
+                                            <option value="">Pilih Jenis</option>
+                                            <option value="Invoice">Invoice</option>
+                                            <option value="Kuitansi">Kuitansi</option>
+                                            <option value="Kontrak">Kontrak</option>
+                                            <option value="SPK">SPK</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nomor Dokumen Referensi</label>
+                                        <input type="text" class="form-control" id="noDokRef" placeholder="DOC-001">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tanggal Dokumen Referensi</label>
+                                        <input type="date" class="form-control" id="tglDokRef">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">ID TKU Pemotong <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="idTkuPemotong" placeholder="TKU-PEMDA" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tanggal Pemotongan <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="tglPemotongan" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="fasilitas">
+                                    <label class="form-check-label" for="fasilitas">
+                                        Menggunakan Fasilitas Khusus
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Step 4: Preview Calculation -->
+                    <div class="step-content" id="step4">
+                        <div class="step-title">Langkah 4: Preview Perhitungan</div>
+                        <div id="calculationPreview">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Save Transaction -->
+                    <div class="step-content" id="step5">
+                        <div class="step-title">Langkah 5: Konfirmasi & Simpan</div>
+                        <div class="text-center">
+                            <i class="fas fa-check-circle text-success" style="font-size: 4rem; margin-bottom: 2rem;"></i>
+                            <h4>Transaksi Siap Disimpan</h4>
+                            <p class="text-muted mb-4">Pastikan semua data sudah benar sebelum menyimpan</p>
+                            <div id="finalSummary" class="text-start">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wizard Actions -->
+                <div class="wizard-actions">
+                    <button type="button" class="btn btn-secondary btn-wizard" id="prevBtn" onclick="previousStep()" style="display: none;">
+                        <i class="fas fa-arrow-left me-2"></i>Sebelumnya
+                    </button>
+                    <div></div>
+                    <button type="button" class="btn btn-primary-custom btn-wizard" id="nextBtn" onclick="nextStep()">
+                        Selanjutnya<i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.js"></script>
+    
+    <script>
+        // ========== BYPASS LOGIN ==========
+        // Kode ini akan melewati proses login untuk pengembangan
+        // Hapus kode ini saat aplikasi siap untuk produksi
+        
+        // Cek apakah session sudah ada
+        const session = localStorage.getItem('arthapala_session');
+        
+        // Jika tidak ada session, buat session dummy untuk bypass login
+        if (!session) {
+            localStorage.setItem('arthapala_session', 'bypass_' + Date.now());
+            console.log('Bypass login aktif - Session dummy dibuat');
+        }
+        
+        // ========== END BYPASS LOGIN ==========
+
+        // Global variables
+        let currentStep = 1;
+        let selectedSubject = '';
+        let selectedTransactionType = '';
+        let transactionData = {};
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tglPemotongan').value = today;
+            document.getElementById('tglDokRef').value = today;
+            
+            // Initialize button state
+            updateButtons();
+        });
+
+        function selectSubject(subject) {
+            selectedSubject = subject;
+
+            // Update UI
+            document.querySelectorAll('.subject-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Find and select the clicked option
+            document.querySelectorAll('.subject-option').forEach(option => {
+                if (option.querySelector('h5').textContent === (subject === 'pribadi' ? 'Pribadi' : 'Perusahaan')) {
+                    option.classList.add('selected');
+                }
+            });
+
+            // Update buttons
+            updateButtons();
+            
+            console.log('Subject selected:', subject);
+        }
+
+        function selectTransactionType(type) {
+            selectedTransactionType = type;
+
+            // Update UI
+            document.querySelectorAll('.type-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Find and select the clicked option
+            document.querySelectorAll('.type-option').forEach(option => {
+                if (option.querySelector('h6').textContent.includes(type)) {
+                    option.classList.add('selected');
+                }
+            });
+
+            // Update buttons
+            updateButtons();
+            
+            console.log('Transaction type selected:', type);
+        }
+
+        function nextStep() {
+            console.log('Next step clicked. Current step:', currentStep);
+            
+            if (!validateCurrentStep()) {
+                console.log('Validation failed for step:', currentStep);
+                return;
+            }
+            
+            if (currentStep < 5) {
+                // Hide current step
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                document.querySelector(`.progress-step[data-step="${currentStep}"]`).classList.remove('active');
+                document.querySelector(`.progress-step[data-step="${currentStep}"]`).classList.add('completed');
+                
+                currentStep++;
+                
+                // Show next step
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                document.querySelector(`.progress-step[data-step="${currentStep}"]`).classList.add('active');
+                
+                // Update content based on step
+                updateStepContent();
+                
+                // Update buttons
+                updateButtons();
+                
+                console.log('Moved to step:', currentStep);
+            }
+        }
+
+        function previousStep() {
+            console.log('Previous step clicked. Current step:', currentStep);
+            
+            if (currentStep > 1) {
+                // Hide current step
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                document.querySelector(`.progress-step[data-step="${currentStep}"]`).classList.remove('active');
+                
+                currentStep--;
+                
+                // Show previous step
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                document.querySelector(`.progress-step[data-step="${currentStep}"]`).classList.remove('completed');
+                document.querySelector(`.progress-step[data-step="${currentStep}"]`).classList.add('active');
+                
+                // Update buttons
+                updateButtons();
+                
+                console.log('Moved to step:', currentStep);
+            }
+        }
+
+        function validateCurrentStep() {
+            console.log('Validating step:', currentStep);
+            
+            switch(currentStep) {
+                case 1:
+                    if (!selectedSubject) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Pilih Subjek Pajak',
+                            text: 'Silakan pilih subjek pajak terlebih dahulu',
+                            confirmButtonColor: '#16478A'
+                        });
+                        return false;
+                    }
+                    return true;
+                case 2:
+                    if (!selectedTransactionType) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Pilih Jenis Transaksi',
+                            text: 'Silakan pilih jenis transaksi terlebih dahulu',
+                            confirmButtonColor: '#16478A'
+                        });
+                        return false;
+                    }
+                    return true;
+                case 3:
+                    return validateForm();
+                case 4:
+                    calculateTransaction();
+                    return true;
+                default:
+                    return true;
+            }
+        }
+
+        function validateForm() {
+            const requiredFields = ['masaPajak', 'tahunPajak', 'idTkuPenerima', 'kodeObjekPajak', 'penghasilan', 'deemed', 'tarif', 'idTkuPemotong', 'tglPemotongan'];
+            
+            // Add subject-specific required fields
+            if (selectedSubject === 'pribadi') {
+                requiredFields.push('nik', 'namaPribadi');
+            } else {
+                requiredFields.push('npwp', 'namaPerusahaan');
+            }
+            
+            let isValid = true;
+            
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field && !field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else if (field) {
+                    field.classList.remove('is-invalid');
+                }
+            });
+            
+            // Validate percentage fields
+            const deemed = parseFloat(document.getElementById('deemed').value);
+            const tarif = parseFloat(document.getElementById('tarif').value);
+            
+            if (deemed > 100) {
+                document.getElementById('deemed').classList.add('is-invalid');
+                isValid = false;
+            }
+            
+            if (tarif > 100) {
+                document.getElementById('tarif').classList.add('is-invalid');
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Form Tidak Lengkap',
+                    text: 'Silakan lengkapi semua field yang wajib diisi',
+                    confirmButtonColor: '#16478A'
+                });
+            }
+            
+            return isValid;
+        }
+
+        function updateStepContent() {
+            console.log('Updating content for step:', currentStep);
+            
+            switch(currentStep) {
+                case 2:
+                    updateTransactionTypes();
+                    break;
+                case 3:
+                    updateSubjectFields();
+                    break;
+                case 4:
+                    updateCalculationPreview();
+                    break;
+                case 5:
+                    updateFinalSummary();
+                    break;
+            }
+        }
+
+        function updateTransactionTypes() {
+            const container = document.getElementById('transactionTypes');
+            let html = '';
+            
+            if (selectedSubject === 'pribadi') {
+                html = `
+                    <div class="type-option" onclick="selectTransactionType('PPh21')">
+                        <h6>PPh 21</h6>
+                        <p class="text-muted mb-0">Pajak Penghasilan Pasal 21</p>
+                    </div>
+                `;
+            } else {
+                html = `
+                    <div class="type-option" onclick="selectTransactionType('PPh22')">
+                        <h6>PPh 22</h6>
+                        <p class="text-muted mb-0">Pembelian Barang</p>
+                    </div>
+                    <div class="type-option" onclick="selectTransactionType('PPh23')">
+                        <h6>PPh 23</h6>
+                        <p class="text-muted mb-0">Jasa Konsultasi</p>
+                    </div>
+                    <div class="type-option" onclick="selectTransactionType('PPh Final UMKM')">
+                        <h6>PPh Final UMKM</h6>
+                        <p class="text-muted mb-0">Final UMKM</p>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function updateSubjectFields() {
+            const container = document.getElementById('subjectFields');
+            let html = '';
+            
+            if (selectedSubject === 'pribadi') {
+                html = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">NIK <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nik" placeholder="3201010101010001" maxlength="16" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="namaPribadi" placeholder="Nama Lengkap" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Status PTKP</label>
+                                <select class="form-select" id="statusPtkp">
+                                    <option value="">Pilih Status PTKP</option>
+                                    <option value="TK/0">TK/0 - Tidak Kawin</option>
+                                    <option value="TK/1">TK/1 - Tidak Kawin, 1 Tanggungan</option>
+                                    <option value="K/0">K/0 - Kawin, Tanpa Tanggungan</option>
+                                    <option value="K/1">K/1 - Kawin, 1 Tanggungan</option>
+                                    <option value="K/2">K/2 - Kawin, 2 Tanggungan</option>
+                                    <option value="K/3">K/3 - Kawin, 3 Tanggungan</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                html = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">NPWP <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="npwp" placeholder="01.234.567.8-901.000" maxlength="20" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nama Perusahaan <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="namaPerusahaan" placeholder="PT/CV/UD Nama Perusahaan" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Opsi Pembayaran</label>
+                                <select class="form-select" id="opsiPembayaran" onchange="toggleSp2d()">
+                                    <option value="">Pilih Opsi</option>
+                                    <option value="IP">IP (Instruksi Pembayaran)</option>
+                                    <option value="SP2D">SP2D Langsung</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nomor SP2D</label>
+                                <input type="text" class="form-control" id="noSp2d" placeholder="SP2D-001" disabled>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function toggleSp2d() {
+            const opsi = document.getElementById('opsiPembayaran').value;
+            const sp2dField = document.getElementById('noSp2d');
+            
+            if (opsi === 'IP') {
+                sp2dField.disabled = false;
+                sp2dField.required = true;
+            } else {
+                sp2dField.disabled = true;
+                sp2dField.required = false;
+                sp2dField.value = '';
+            }
+        }
+
+        function calculateTransaction() {
+            const penghasilan = parseFloat(document.getElementById('penghasilan').value) || 0;
+            const deemed = parseFloat(document.getElementById('deemed').value) || 0;
+            const tarif = parseFloat(document.getElementById('tarif').value) || 0;
+            
+            let result = {};
+            
+            // Check threshold for PPh22 and PPh23
+            if ((selectedTransactionType === 'PPh22' || selectedTransactionType === 'PPh23') && penghasilan < 2000000) {
+                result = {
+                    penghasilan: penghasilan,
+                    status: 'Tidak Terutang',
+                    alasan: 'Nilai penghasilan < Rp 2.000.000',
+                    pph: 0,
+                    dpp: 0,
+                    ppn: 0
+                };
+            } else {
+                switch(selectedTransactionType) {
+                    case 'PPh21':
+                        result = {
+                            penghasilan: penghasilan,
+                            deemed: deemed,
+                            tarif: tarif,
+                            pph: penghasilan * (deemed/100) * (tarif/100),
+                            formula: 'PPh21 = Penghasilan × Deemed × Tarif'
+                        };
+                        break;
+                        
+                    case 'PPh22':
+                        const dpp22 = (100/111) * penghasilan;
+                        const pph22 = dpp22 * (deemed/100) * (tarif/100);
+                        const dppNilaiLain = (11/12) * dpp22;
+                        const ppn22 = dppNilaiLain * 0.12;
+                        
+                        result = {
+                            penghasilan: penghasilan,
+                            dpp: dpp22,
+                            pph: pph22,
+                            dppNilaiLain: dppNilaiLain,
+                            ppn: ppn22,
+                            formula: 'DPP = (100/111) × Penghasilan<br>PPh22 = DPP × Deemed × Tarif<br>PPN = (11/12) × DPP × 12%'
+                        };
+                        break;
+                        
+                    case 'PPh23':
+                        result = {
+                            penghasilan: penghasilan,
+                            deemed: deemed,
+                            tarif: tarif,
+                            pph: penghasilan * (deemed/100) * (tarif/100),
+                            formula: 'PPh23 = Penghasilan × Deemed × Tarif'
+                        };
+                        break;
+                        
+                    case 'PPh Final UMKM':
+                        result = {
+                            penghasilan: penghasilan,
+                            tarifFinal: tarif,
+                            pph: penghasilan * (tarif/100),
+                            formula: 'PPh Final = Penghasilan × Tarif Final'
+                        };
+                        break;
+                }
+            }
+            
+            transactionData.calculation = result;
+        }
+
+        function updateCalculationPreview() {
+            calculateTransaction();
+            const result = transactionData.calculation;
+            const container = document.getElementById('calculationPreview');
+            
+            let html = `
+                <div class="calculation-result">
+                    <h6 class="mb-3 text-primary">Hasil Perhitungan ${selectedTransactionType}</h6>
+            `;
+            
+            if (result.status === 'Tidak Terutang') {
+                html += `
+                    <div class="calculation-row">
+                        <span>Penghasilan Bruto:</span>
+                        <span>Rp ${result.penghasilan.toLocaleString('id-ID')}</span>
+                    </div>
+                    <div class="calculation-row">
+                        <span>Status:</span>
+                        <span class="text-warning"><strong>${result.status}</strong></span>
+                    </div>
+                    <div class="calculation-row">
+                        <span>Alasan:</span>
+                        <span>${result.alasan}</span>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="calculation-row">
+                        <span>Penghasilan Bruto:</span>
+                        <span>Rp ${result.penghasilan.toLocaleString('id-ID')}</span>
+                    </div>
+                `;
+                
+                if (result.dpp) {
+                    html += `
+                        <div class="calculation-row">
+                            <span>DPP:</span>
+                            <span>Rp ${result.dpp.toLocaleString('id-ID')}</span>
+                        </div>
+                    `;
+                }
+                
+                if (result.deemed) {
+                    html += `
+                        <div class="calculation-row">
+                            <span>Deemed (${result.deemed}%):</span>
+                            <span>Rp ${(result.penghasilan * result.deemed/100).toLocaleString('id-ID')}</span>
+                        </div>
+                    `;
+                }
+                
+                html += `
+                    <div class="calculation-row">
+                        <span><strong>${selectedTransactionType}:</strong></span>
+                        <span><strong>Rp ${result.pph.toLocaleString('id-ID')}</strong></span>
+                    </div>
+                `;
+                
+                if (result.ppn) {
+                    html += `
+                        <div class="calculation-row">
+                            <span>PPN (12%):</span>
+                            <span>Rp ${result.ppn.toLocaleString('id-ID')}</span>
+                        </div>
+                    `;
+                }
+            }
+            
+            html += `
+                </div>
+                <div class="mt-3">
+                    <h6>Formula Perhitungan:</h6>
+                    <div class="alert alert-info">
+                        ${result.formula || 'Formula tidak tersedia'}
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        function updateFinalSummary() {
+            const container = document.getElementById('finalSummary');
+            const calculation = transactionData.calculation;
+            
+            let html = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-primary">Data Wajib Pajak</h6>
+                        <table class="table table-sm">
+            `;
+            
+            if (selectedSubject === 'pribadi') {
+                html += `
+                    <tr><td>NIK:</td><td>${document.getElementById('nik').value}</td></tr>
+                    <tr><td>Nama:</td><td>${document.getElementById('namaPribadi').value}</td></tr>
+                    <tr><td>Status PTKP:</td><td>${document.getElementById('statusPtkp').value || 'Tidak diisi'}</td></tr>
+                `;
+            } else {
+                html += `
+                    <tr><td>NPWP:</td><td>${document.getElementById('npwp').value}</td></tr>
+                    <tr><td>Perusahaan:</td><td>${document.getElementById('namaPerusahaan').value}</td></tr>
+                    <tr><td>Pembayaran:</td><td>${document.getElementById('opsiPembayaran').value || 'Tidak diisi'}</td></tr>
+                `;
+            }
+            
+            html += `
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-primary">Data Transaksi</h6>
+                        <table class="table table-sm">
+                            <tr><td>Jenis:</td><td>${selectedTransactionType}</td></tr>
+                            <tr><td>Masa/Tahun:</td><td>${document.getElementById('masaPajak').value}/${document.getElementById('tahunPajak').value}</td></tr>
+                            <tr><td>Penghasilan:</td><td>Rp ${calculation.penghasilan.toLocaleString('id-ID')}</td></tr>
+                            <tr><td>PPh:</td><td><strong>Rp ${calculation.pph.toLocaleString('id-ID')}</strong></td></tr>
+                            <tr><td>Dokumen Ref:</td><td>${document.getElementById('noDokRef').value || 'Tidak diisi'}</td></tr>
+                        </table>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        function updateButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            console.log('Updating buttons. Current step:', currentStep, 'Selected subject:', selectedSubject, 'Selected type:', selectedTransactionType);
+            
+            // Show/hide previous button
+            if (currentStep > 1) {
+                prevBtn.style.display = 'block';
+            } else {
+                prevBtn.style.display = 'none';
+            }
+            
+            // Update next button
+            if (currentStep === 5) {
+                nextBtn.innerHTML = '<i class="fas fa-save me-2"></i>Simpan Transaksi';
+                nextBtn.className = 'btn btn-yellow btn-wizard';
+                nextBtn.onclick = saveTransaction;
+                nextBtn.disabled = false;
+            } else {
+                nextBtn.innerHTML = 'Selanjutnya<i class="fas fa-arrow-right ms-2"></i>';
+                nextBtn.className = 'btn btn-primary-custom btn-wizard';
+                nextBtn.onclick = nextStep;
+                
+                // Disable next button by default for steps 1 and 2 if not selected
+                if ((currentStep === 1 && !selectedSubject) || (currentStep === 2 && !selectedTransactionType)) {
+                    nextBtn.disabled = true;
+                } else {
+                    nextBtn.disabled = false;
+                }
+            }
+            
+            console.log('Next button disabled:', nextBtn.disabled);
+        }
+
+        function saveTransaction() {
+            // Show loading
+            Swal.fire({
+                title: 'Menyimpan Transaksi',
+                text: 'Sedang memproses data...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading()
+                }
+            });
+            
+            // Simulate saving delay
+            setTimeout(() => {
+                // Collect all form data
+                const formData = {
+                    id: 'TRX-' + Date.now(),
+                    subject: selectedSubject,
+                    type: selectedTransactionType,
+                    masaPajak: document.getElementById('masaPajak').value,
+                    tahunPajak: document.getElementById('tahunPajak').value,
+                    penghasilan: parseFloat(document.getElementById('penghasilan').value),
+                    calculation: transactionData.calculation,
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Add subject-specific data
+                if (selectedSubject === 'pribadi') {
+                    formData.nik = document.getElementById('nik').value;
+                    formData.nama = document.getElementById('namaPribadi').value;
+                    formData.statusPtkp = document.getElementById('statusPtkp').value;
+                } else {
+                    formData.npwp = document.getElementById('npwp').value;
+                    formData.nama = document.getElementById('namaPerusahaan').value;
+                    formData.opsiPembayaran = document.getElementById('opsiPembayaran').value;
+                    formData.noSp2d = document.getElementById('noSp2d').value;
+                }
+                
+                // Save to localStorage
+                let transactions = JSON.parse(localStorage.getItem('arthapala_transactions') || '[]');
+                transactions.push(formData);
+                localStorage.setItem('arthapala_transactions', JSON.stringify(transactions));
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Transaksi Tersimpan',
+                    text: `Transaksi dengan ID ${formData.id} berhasil disimpan`,
+                    confirmButtonColor: '#16478A'
+                }).then(() => {
+                    // Reset form or redirect
+                    window.location.href = 'dashboard-asn.html';
+                });
+            }, 1500);
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        function logout() {
+            Swal.fire({
+                title: 'Logout',
+                text: 'Apakah Anda yakin ingin keluar?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#16478A',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('arthapala_session');
+                    window.location.href = 'index.html';
+                }
+            });
+        }
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.12/sweetalert2.min.css">
+</body>
+</html>
